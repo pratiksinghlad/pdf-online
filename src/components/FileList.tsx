@@ -14,7 +14,7 @@ import {
     sortableKeyboardCoordinates,
     verticalListSortingStrategy,
 } from '@dnd-kit/sortable';
-import { AnimatePresence } from 'framer-motion';
+
 import { usePDF } from '../context/PDFContext';
 import { FileCard } from './FileCard';
 
@@ -100,11 +100,9 @@ export function FileList() {
             >
                 <SortableContext items={files.map((f) => f.id)} strategy={verticalListSortingStrategy}>
                     <VStack gap={3} align="stretch" role="list" aria-label="PDF files to merge">
-                        <AnimatePresence mode="popLayout">
-                            {files.map((file, index) => (
-                                <FileCard key={file.id} file={file} index={index} />
-                            ))}
-                        </AnimatePresence>
+                        {files.map((file, index) => (
+                            <FileCard key={file.id} file={file} index={index} />
+                        ))}
                     </VStack>
                 </SortableContext>
             </DndContext>

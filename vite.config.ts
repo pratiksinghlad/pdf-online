@@ -40,7 +40,7 @@ export default defineConfig({
   },
   // Optimize dependencies
   optimizeDeps: {
-    include: ['react', 'react-dom', '@chakra-ui/react'],
-    exclude: ['pdf-lib', 'pdfjs-dist'], // Lazy load these
+    include: ['react', 'react-dom', '@chakra-ui/react', 'pdf-lib'],
+    exclude: ['pdfjs-dist'], // Lazy load this as it's large and has its own worker
   },
 });

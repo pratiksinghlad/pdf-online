@@ -1,6 +1,6 @@
-# PDF Merge Pro
+# PDF Online
 
-A **free, fast, and privacy-first** PDF merger that runs entirely in your browser.
+A **free, fast, and privacy-first** PDF online that runs entirely in your browser.
 
 ![Desktop Demo](./demo-desktop.png)
 ![Mobile Demo](./demo-mobile.png)

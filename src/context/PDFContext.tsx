@@ -1,6 +1,7 @@
 import React, { createContext, useContext, useReducer, useCallback, useRef, useEffect } from 'react';
 import type { PDFFileInfo, MergeProgress } from '../types';
 import { generateId, readFileAsArrayBuffer, isValidPDF, downloadBlob, generateMergedFilename, formatFileSize } from '../utils';
+import PDFWorker from '../workers/pdfWorker?worker';
 
 // State interface
 interface PDFState {
@@ -92,10 +93,17 @@ export function PDFProvider({ children }: { children: React.ReactNode }) {
 
     // Initialize worker
     useEffect(() => {
-        workerRef.current = new Worker(
-            new URL('../workers/pdfWorker.ts', import.meta.url),
-            { type: 'module' }
-        );
+        try {
+            console.log('Initializing PDF Worker...');
+            workerRef.current = new PDFWorker();
+
+            workerRef.current.onerror = (e) => {
+                console.error('Worker error:', e);
+            };
+        } catch (error) {
+            console.error('Failed to initialize PDF worker:', error);
+            dispatch({ type: 'SET_ERROR', payload: 'Failed to initialize PDF service. Please refresh.' });
+        }
 
         return () => {
             workerRef.current?.terminate();
@@ -108,11 +116,9 @@ export function PDFProvider({ children }: { children: React.ReactNode }) {
             // Lazy load pdfjs-dist
             const pdfjsLib = await import('pdfjs-dist');
 
-            // Set worker source
-            pdfjsLib.GlobalWorkerOptions.workerSrc = new URL(
-                'pdfjs-dist/build/pdf.worker.min.mjs',
-                import.meta.url
-            ).toString();
+            // Set worker source - using a CDN is the most reliable way for now to avoid build issues
+            // In a production app with proper Vite config, we could use the local file
+            pdfjsLib.GlobalWorkerOptions.workerSrc = `https://unpkg.com/pdfjs-dist@${pdfjsLib.version}/build/pdf.worker.min.mjs`;
 
             const loadingTask = pdfjsLib.getDocument({ data: buffer.slice(0) });
             const pdf = await loadingTask.promise;
@@ -133,7 +139,7 @@ export function PDFProvider({ children }: { children: React.ReactNode }) {
             await page.render({
                 canvasContext: context,
                 viewport,
-            }).promise;
+            } as any).promise;
 
             const thumbnailUrl = canvas.toDataURL('image/jpeg', 0.7);
 
@@ -143,6 +149,7 @@ export function PDFProvider({ children }: { children: React.ReactNode }) {
             return thumbnailUrl;
         } catch (error) {
             console.error('Failed to generate thumbnail:', error);
+            // Don't fail the whole file add if thumbnail fails
             return null;
         }
     }, []);
@@ -151,11 +158,14 @@ export function PDFProvider({ children }: { children: React.ReactNode }) {
     const getPageCount = useCallback(async (buffer: ArrayBuffer): Promise<number> => {
         return new Promise((resolve) => {
             if (!workerRef.current) {
+                console.warn('Worker not available for getPageCount');
                 resolve(0);
                 return;
             }
 
             const id = generateId();
+            const bufferToTransfer = buffer.slice(0);
+
             const handler = (event: MessageEvent) => {
                 if (event.data.id === id) {
                     workerRef.current?.removeEventListener('message', handler);
@@ -165,9 +175,15 @@ export function PDFProvider({ children }: { children: React.ReactNode }) {
 
             workerRef.current.addEventListener('message', handler);
             workerRef.current.postMessage(
-                { type: 'getPageCount', payload: { buffer: buffer.slice(0) }, id },
-                { transfer: [] }
+                { type: 'getPageCount', payload: { buffer: bufferToTransfer }, id },
+                [bufferToTransfer]
             );
+
+            // Timeout for page count
+            setTimeout(() => {
+                workerRef.current?.removeEventListener('message', handler);
+                resolve(0);
+            }, 10000);
         });
     }, []);
 
@@ -231,6 +247,7 @@ export function PDFProvider({ children }: { children: React.ReactNode }) {
                     },
                 });
             } catch (error) {
+                console.error('Error processing file:', error);
                 dispatch({
                     type: 'UPDATE_FILE',
                     payload: {
@@ -298,7 +315,7 @@ export function PDFProvider({ children }: { children: React.ReactNode }) {
         }
 
         if (!workerRef.current) {
-            dispatch({ type: 'SET_ERROR', payload: 'Worker not available' });
+            dispatch({ type: 'SET_ERROR', payload: 'Worker not available. Please refresh.' });
             return;
         }
 
@@ -312,9 +329,10 @@ export function PDFProvider({ children }: { children: React.ReactNode }) {
         const filesToMerge = await Promise.all(
             state.files.map(async (file) => {
                 const buffer = file.arrayBuffer || (await readFileAsArrayBuffer(file.file));
+                console.log(`Preparing "${file.name}" for merge. Size: ${buffer.byteLength} bytes`);
                 return {
                     id: file.id,
-                    buffer: buffer.slice(0), // Clone buffer
+                    buffer: buffer.slice(0),
                     name: file.name,
                 };
             })
@@ -327,13 +345,16 @@ export function PDFProvider({ children }: { children: React.ReactNode }) {
 
         dispatch({
             type: 'SET_MERGE_PROGRESS',
-            payload: { status: 'merging', progress: 30, message: 'Merging PDFs...' },
+            payload: { status: 'merging', progress: 30, message: 'Merging PDFs... This may take a moment.' },
         });
 
         return new Promise<void>((resolve) => {
             const id = generateId();
+            let timeoutId: ReturnType<typeof setTimeout>;
+
             const handler = (event: MessageEvent) => {
                 if (event.data.id === id) {
+                    clearTimeout(timeoutId);
                     workerRef.current?.removeEventListener('message', handler);
 
                     if (mergeAbortRef.current) {
@@ -377,8 +398,22 @@ export function PDFProvider({ children }: { children: React.ReactNode }) {
             const transferables = filesToMerge.map((f) => f.buffer);
             workerRef.current!.postMessage(
                 { type: 'merge', payload: { files: filesToMerge }, id },
-                { transfer: transferables }
+                transferables
             );
+
+            // Timeout after 60 seconds
+            timeoutId = setTimeout(() => {
+                workerRef.current?.removeEventListener('message', handler);
+                dispatch({
+                    type: 'SET_MERGE_PROGRESS',
+                    payload: {
+                        status: 'error',
+                        progress: 0,
+                        message: 'Merge operation timed out. Please try with fewer files.',
+                    },
+                });
+                resolve();
+            }, 60000);
         });
     }, [state.files]);
 

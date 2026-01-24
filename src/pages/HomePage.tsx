@@ -70,7 +70,7 @@ export function HomePage() {
                             color="gray.800"
                             textAlign="center"
                         >
-                            Why Choose PDF Merge Pro?
+                            Why Choose PDF online?
                         </Heading>
 
                         <Box

@@ -59,7 +59,7 @@ export function Navbar() {
                             bgClip="text"
                             display={{ base: 'none', sm: 'block' }}
                         >
-                            PDF Merge Pro
+                            PDF online
                         </Text>
                     </HStack>
                 </Link>

@@ -24,7 +24,7 @@ export function HowItWorksPage() {
                             How It Works
                         </Heading>
                         <Text fontSize={{ base: 'md', md: 'lg' }} color="gray.600">
-                            Understanding the technology behind PDF Merge Pro
+                            Understanding the technology behind PDF online
                         </Text>
                     </MotionBox>
 
@@ -236,7 +236,7 @@ export function HowItWorksPage() {
                         <Box p={6} bg="green.50" borderRadius="xl" border="1px solid" borderColor="green.200">
                             <VStack align="start" gap={3}>
                                 <Text fontSize="sm" color="green.800">
-                                    PDF Merge Pro is built with accessibility in mind:
+                                    PDF online is built with accessibility in mind:
                                 </Text>
                                 <Box as="ul" pl={5} fontSize="sm" color="green.700">
                                     <li>Full keyboard navigation (Tab, Arrow keys, Enter, Delete)</li>

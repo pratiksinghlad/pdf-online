@@ -21,7 +21,7 @@ export function AboutPage() {
                             color="gray.800"
                             mb={4}
                         >
-                            About PDF Merge Pro
+                            About PDF online
                         </Heading>
                         <Text fontSize={{ base: 'md', md: 'lg' }} color="gray.600">
                             A free, open-source tool for merging PDFs with complete privacy.
@@ -55,7 +55,7 @@ export function AboutPage() {
                         </HStack>
                         <VStack align="start" gap={3}>
                             <Text color="green.700">
-                                <strong>Your files never leave your browser.</strong> PDF Merge Pro processes all
+                                <strong>Your files never leave your browser.</strong> PDF online processes all
                                 files entirely on your device using modern web technologies.
                             </Text>
                             <Text color="green.700" fontSize="sm">
@@ -216,7 +216,7 @@ export function AboutPage() {
                         py={8}
                     >
                         <Text fontSize="sm" color="gray.500">
-                            PDF Merge Pro is open source software released under the MIT License.
+                            PDF online is open source software released under the MIT License.
                             <br />
                             <Link color="brand.500" href="https://github.com" target="_blank" rel="noopener">
                                 View on GitHub →

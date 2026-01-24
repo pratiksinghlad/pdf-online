@@ -33,11 +33,11 @@ export function Footer() {
                                 </Text>
                             </Box>
                             <Text fontWeight="bold" color="gray.700">
-                                PDF Merge Pro
+                                PDF online
                             </Text>
                         </HStack>
                         <Text fontSize="sm" color="gray.500" textAlign={{ base: 'center', md: 'left' }}>
-                            Free, fast, and private PDF merging
+                            Free, fast, and private PDF online
                         </Text>
                     </VStack>
 
@@ -81,7 +81,7 @@ export function Footer() {
                             </Link>
                         </HStack>
                         <Text fontSize="xs" color="gray.400">
-                            © {new Date().getFullYear()} PDF Merge Pro. MIT License.
+                            © {new Date().getFullYear()} PDF online. MIT License.
                         </Text>
                     </VStack>
                 </Flex>
