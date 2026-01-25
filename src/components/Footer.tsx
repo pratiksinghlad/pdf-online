@@ -1,4 +1,5 @@
-import { Box, Flex, Text, Link, HStack, VStack, Icon } from '@chakra-ui/react';
+import { Box, Flex, Text, Link as ChakraLink, HStack, VStack, Icon } from '@chakra-ui/react';
+import { Link as RouterLink } from 'react-router-dom';
 
 export function Footer() {
     return (
@@ -73,12 +74,16 @@ export function Footer() {
                     {/* Links */}
                     <VStack align={{ base: 'center', md: 'flex-end' }} gap={2}>
                         <HStack gap={4}>
-                            <Link href="/about" color="gray.600" fontSize="sm" _hover={{ color: 'brand.500' }}>
-                                About
-                            </Link>
-                            <Link href="/how-it-works" color="gray.600" fontSize="sm" _hover={{ color: 'brand.500' }}>
-                                How It Works
-                            </Link>
+                            <RouterLink to="/about">
+                                <ChakraLink as="span" color="gray.600" fontSize="sm" cursor="pointer" _hover={{ color: 'brand.500' }}>
+                                    About
+                                </ChakraLink>
+                            </RouterLink>
+                            <RouterLink to="/how-it-works">
+                                <ChakraLink as="span" color="gray.600" fontSize="sm" cursor="pointer" _hover={{ color: 'brand.500' }}>
+                                    How It Works
+                                </ChakraLink>
+                            </RouterLink>
                         </HStack>
                         <Text fontSize="xs" color="gray.400">
                             © {new Date().getFullYear()} PDF online. MIT License.

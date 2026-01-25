@@ -4,7 +4,7 @@ import { DropZone, FileList, MergeButton } from '../components';
 
 const MotionBox = motion.create(Box);
 
-export function HomePage() {
+export function MergePage() {
     return (
         <Box minH="100vh" bg="white">
             {/* Hero Section */}

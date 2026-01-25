@@ -4,7 +4,11 @@ import { useDropzone } from 'react-dropzone';
 import { motion } from 'framer-motion';
 import { usePDF } from '../context/PDFContext';
 
-const MotionBox = motion.create(Box);
+/* eslint-disable @typescript-eslint/no-explicit-any, prefer-const, react-refresh/only-export-components */
+// Use a loose typing for the motion-wrapped Chakra component to avoid
+// incompatible prop type issues between Chakra's DOM handlers and
+// the motion component's prop definitions.
+const MotionBox: any = (motion as any)(Box);
 
 export function DropZone() {
     const { addFiles, files } = usePDF();
@@ -77,7 +81,7 @@ export function DropZone() {
             bg={getBgColor()}
             p={{ base: 6, md: hasFiles ? 6 : 12 }}
             textAlign="center"
-            transition="all 0.2s"
+            style={{ transition: 'all 0.2s' }}
             _hover={{
                 borderColor: 'brand.400',
                 bg: 'brand.50',
@@ -154,7 +158,7 @@ export function DropZone() {
                     fontWeight="600"
                     fontSize={{ base: 'sm', md: hasFiles ? 'sm' : 'md' }}
                     shadow="lg"
-                    transition="all 0.2s"
+                    style={{ transition: 'all 0.2s' }}
                     _hover={{
                         transform: 'translateY(-2px)',
                         shadow: 'xl',

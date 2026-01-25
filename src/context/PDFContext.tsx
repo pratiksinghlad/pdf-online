@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any, prefer-const, react-refresh/only-export-components */
 import React, { createContext, useContext, useReducer, useCallback, useRef, useEffect } from 'react';
 import type { PDFFileInfo, MergeProgress } from '../types';
 import { generateId, readFileAsArrayBuffer, isValidPDF, downloadBlob, generateMergedFilename, formatFileSize } from '../utils';

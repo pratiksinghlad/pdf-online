@@ -1,15 +1,45 @@
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 import path from 'path';
+import checker from "vite-plugin-checker";
+import viteCompression from "vite-plugin-compression";
 
 // https://vite.dev/config/
 export default defineConfig({
-  plugins: [react()],
+  plugins: [
+    react(),
+    process.env.NODE_ENV === "production" ? null : checker({
+      typescript: true,
+      eslint: {
+        lintCommand: 'eslint "./src/**/*.{ts,tsx}" --max-warnings=0',
+        dev: {
+          logLevel: ["error"],
+        },
+        useFlatConfig: true,
+      },
+      overlay: false,
+    }),
+    viteCompression({
+      algorithm: "brotliCompress",
+      ext: ".br",
+      threshold: 1024,
+    }),
+    viteCompression({
+      algorithm: "gzip",
+      ext: ".gz",
+      threshold: 1024,
+    }),
+  ].filter(Boolean),
+  server: {
+    port: 3001,
+  },
   resolve: {
     alias: {
       '@': path.resolve(__dirname, './src'),
     },
   },
+  assetsInclude: ["**/*.jpg", "**/*.png", "**/*.svg", "**/*.gif", "**/*.webp"],
+  base: "/pdf-online/",
   build: {
     // Code splitting for optimal bundle size
     rollupOptions: {

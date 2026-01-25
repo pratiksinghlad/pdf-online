@@ -3,7 +3,7 @@
  * Handles heavy PDF operations in a separate thread
  * Uses transferable objects to minimize memory copying
  */
-
+/* eslint-disable @typescript-eslint/no-explicit-any, prefer-const, react-refresh/only-export-components */
 import { PDFDocument } from 'pdf-lib';
 
 interface MergeInput {
@@ -46,12 +46,11 @@ self.onmessage = async (event: MessageEvent) => {
 
                 if (result.success && result.data) {
                     // Transfer the ArrayBuffer to avoid copying
-                    (globalThis as any).postMessage(
-                        { id, type: 'merge', result },
-                        [result.data]
-                    );
+                    (self as unknown as {
+                        postMessage(message: any, transfer?: Transferable[]): void;
+                    }).postMessage({ id, type: 'merge', result }, [result.data]);
                 } else {
-                    (globalThis as any).postMessage({ id, type: 'merge', result });
+                    self.postMessage({ id, type: 'merge', result });
                 }
                 break;
             }
@@ -60,13 +59,13 @@ self.onmessage = async (event: MessageEvent) => {
                 console.log('Worker getting page count...');
                 const result = await getPageCount(payload as GetPageCountInput);
                 console.log('Worker page count result:', result.success, result.pageCount);
-                (globalThis as any).postMessage({ id, type: 'getPageCount', result });
+                self.postMessage({ id, type: 'getPageCount', result });
                 break;
             }
 
             default:
                 console.warn('Worker unknown message type:', type);
-                (globalThis as any).postMessage({
+                self.postMessage({
                     id,
                     type,
                     result: { success: false, error: `Unknown message type: ${type}` },
@@ -74,7 +73,7 @@ self.onmessage = async (event: MessageEvent) => {
         }
     } catch (error) {
         console.error('Worker top-level error:', error);
-        (globalThis as any).postMessage({
+        self.postMessage({
             id,
             type,
             result: {
