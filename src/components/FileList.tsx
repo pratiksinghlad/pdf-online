@@ -30,7 +30,7 @@ export function FileList() {
         }),
         useSensor(TouchSensor, {
             activationConstraint: {
-                delay: 200,
+                delay: 150,
                 tolerance: 5,
             },
         }),

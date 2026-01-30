@@ -7,6 +7,7 @@ const MotionBox = motion.create(Box);
 // Navigation links
 const navLinks = [
     { label: 'Merge PDF', path: '/merge' },
+    { label: 'Compress PDF', path: '/compress' },
     { label: 'About', path: '/about' },
     { label: 'How It Works', path: '/how-it-works' },
 ];

@@ -3,7 +3,7 @@ import { ChakraProvider, Box } from '@chakra-ui/react';
 import { system } from './theme';
 import { PDFProvider } from './context/PDFContext';
 import { Navbar, Footer } from './components';
-import { MergePage, AboutPage, HowItWorksPage } from './pages';
+import { MergePage, AboutPage, HowItWorksPage, CompressPage } from './pages';
 
 function App() {
   return (
@@ -16,6 +16,7 @@ function App() {
               <Routes>
                 <Route path="/" element={<MergePage />} />
                 <Route path="/merge" element={<MergePage />} />
+                <Route path="/compress" element={<CompressPage />} />
                 <Route path="/about" element={<AboutPage />} />
                 <Route path="/how-it-works" element={<HowItWorksPage />} />
               </Routes>

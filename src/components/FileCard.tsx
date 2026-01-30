@@ -113,6 +113,7 @@ export function FileCard({ file, index }: FileCardProps) {
                         _hover={{ bg: 'gray.100' }}
                         _active={{ cursor: 'grabbing' }}
                         aria-label="Drag to reorder"
+                        style={{ touchAction: 'none' }}
                     >
                         <VStack gap={0.5}>
                             {[0, 1, 2].map((i) => (

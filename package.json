@@ -11,8 +11,8 @@
     "build:cf": "npm run build",
     "preview": "vite preview",
     "test": "vitest",
-    "predeploy": "npm run build",
-    "deploy": "gh-pages -d dist",
+    "postbuild": "node scripts/copy-404.js",
+    "deploy": "npm run build && node scripts/copy-404.js && gh-pages -d dist",
     "lint": "eslint . --max-warnings=0 --fix"
   },
   "dependencies": {
