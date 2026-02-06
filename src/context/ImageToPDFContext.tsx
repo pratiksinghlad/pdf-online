@@ -405,10 +405,11 @@ export function ImageToPDFProvider({ children }: { children: React.ReactNode }) 
                 payload: { status: 'complete', progress: 100, message: 'Download started!' },
             });
 
-            // Reset after download
+            // Clear files and reset after download
             setTimeout(() => {
+                clearFiles();
                 dispatch({ type: 'SET_CONVERT_PROGRESS', payload: initialState.convertProgress });
-            }, 2000);
+            }, 1000);
 
         } catch (error) {
             console.error('Error converting to PDF:', error);
@@ -421,7 +422,7 @@ export function ImageToPDFProvider({ children }: { children: React.ReactNode }) 
                 },
             });
         }
-    }, [state.files, state.options]);
+    }, [state.files, state.options, clearFiles]);
 
     const value: ImageToPDFContextValue = {
         ...state,

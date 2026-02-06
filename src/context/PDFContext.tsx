@@ -375,10 +375,11 @@ export function PDFProvider({ children }: { children: React.ReactNode }) {
                         const filename = generateMergedFilename();
                         downloadBlob(result.data, filename);
 
-                        // Reset after download
+                        // Clear files and reset after download
                         setTimeout(() => {
+                            clearFiles();
                             dispatch({ type: 'SET_MERGE_PROGRESS', payload: initialState.mergeProgress });
-                        }, 2000);
+                        }, 1000);
                     } else {
                         dispatch({
                             type: 'SET_MERGE_PROGRESS',
@@ -416,7 +417,7 @@ export function PDFProvider({ children }: { children: React.ReactNode }) {
                 resolve();
             }, 60000);
         });
-    }, [state.files]);
+    }, [state.files, clearFiles]);
 
     // Cancel merge
     const cancelMerge = useCallback(() => {

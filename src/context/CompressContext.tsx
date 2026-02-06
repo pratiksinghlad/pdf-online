@@ -380,35 +380,108 @@ export function CompressProvider({ children }: { children: React.ReactNode }) {
         });
     }, [state.files, state.compressionOptions]);
 
-    // Compress a single PDF
+    // Compress a single PDF by rendering pages to images and re-creating the PDF
     const compressSinglePDF = async (buffer: ArrayBuffer, options: CompressionOptions): Promise<ArrayBuffer> => {
         const { PDFDocument } = await import('pdf-lib');
+        const pdfjsLib = await import('pdfjs-dist');
 
-        const sourceDoc = await PDFDocument.load(new Uint8Array(buffer));
-        const newDoc = await PDFDocument.create();
+        // Set worker source for pdfjs
+        pdfjsLib.GlobalWorkerOptions.workerSrc = `https://unpkg.com/pdfjs-dist@${pdfjsLib.version}/build/pdf.worker.min.mjs`;
 
-        const pages = await newDoc.copyPages(sourceDoc, sourceDoc.getPageIndices());
-        pages.forEach((page) => newDoc.addPage(page));
-
-        // Apply compression based on level
-        const saveOptions: any = {
-            useObjectStreams: true,
-            addDefaultPage: false,
+        // Compression settings based on level
+        // Basic: higher quality, less compression
+        // Strong: lower quality, more compression (like iLovePDF, smallpdf)
+        const compressionConfig = {
+            basic: {
+                scale: 1.5,       // Medium DPI (around 144 DPI for standard pages)
+                quality: 0.75,    // 75% JPEG quality
+            },
+            strong: {
+                scale: 1.0,       // Lower DPI (around 96 DPI)
+                quality: 0.50,    // 50% JPEG quality - aggressive compression
+            },
         };
 
-        if (options.level === 'strong') {
-            // For strong compression, we'll strip metadata 
-            if (options.removeMetadata) {
-                newDoc.setTitle('');
-                newDoc.setAuthor('');
-                newDoc.setSubject('');
-                newDoc.setKeywords([]);
-                newDoc.setCreator('');
-                newDoc.setProducer('PDF Compress');
+        const config = compressionConfig[options.level];
+
+        // Load the source PDF with pdfjs for rendering
+        const loadingTask = pdfjsLib.getDocument({ data: buffer.slice(0) });
+        const pdfDoc = await loadingTask.promise;
+        const numPages = pdfDoc.numPages;
+
+        // Create new PDF document
+        const newDoc = await PDFDocument.create();
+
+        // Process each page
+        for (let pageNum = 1; pageNum <= numPages; pageNum++) {
+            const page = await pdfDoc.getPage(pageNum);
+            const viewport = page.getViewport({ scale: config.scale });
+
+            // Create canvas for rendering
+            const canvas = document.createElement('canvas');
+            const context = canvas.getContext('2d');
+            if (!context) {
+                throw new Error('Failed to create canvas context');
             }
+
+            canvas.width = viewport.width;
+            canvas.height = viewport.height;
+
+            // Render the page to canvas
+            await page.render({
+                canvasContext: context,
+                viewport: viewport,
+                canvas: canvas,
+            } as any).promise;
+
+            // Convert canvas to JPEG with quality compression
+            const jpegDataUrl = canvas.toDataURL('image/jpeg', config.quality);
+
+            // Extract base64 data from data URL
+            const base64Data = jpegDataUrl.split(',')[1];
+            const jpegBytes = Uint8Array.from(atob(base64Data), c => c.charCodeAt(0));
+
+            // Embed the compressed image in the new PDF
+            const jpegImage = await newDoc.embedJpg(jpegBytes);
+
+            // Calculate page dimensions to maintain aspect ratio
+            // Use original page dimensions for proper sizing
+            const originalViewport = page.getViewport({ scale: 1.0 });
+            const pageWidth = originalViewport.width * 0.75; // Convert to points (72 DPI)
+            const pageHeight = originalViewport.height * 0.75;
+
+            // Add page with the compressed image
+            const newPage = newDoc.addPage([pageWidth, pageHeight]);
+            newPage.drawImage(jpegImage, {
+                x: 0,
+                y: 0,
+                width: pageWidth,
+                height: pageHeight,
+            });
+
+            // Clean up canvas
+            canvas.width = 0;
+            canvas.height = 0;
         }
 
-        const compressedBytes = await newDoc.save(saveOptions);
+        // Clean up pdfjs document
+        pdfDoc.destroy();
+
+        // Apply metadata options
+        if (options.removeMetadata) {
+            newDoc.setTitle('');
+            newDoc.setAuthor('');
+            newDoc.setSubject('');
+            newDoc.setKeywords([]);
+            newDoc.setCreator('');
+        }
+        newDoc.setProducer('PDF Online Compressor');
+
+        // Save with object streams for additional size reduction
+        const compressedBytes = await newDoc.save({
+            useObjectStreams: true,
+            addDefaultPage: false,
+        });
 
         // Create a new ArrayBuffer with the exact size
         const resultBuffer = new ArrayBuffer(compressedBytes.byteLength);
@@ -423,8 +496,13 @@ export function CompressProvider({ children }: { children: React.ReactNode }) {
         if (file?.compressedBuffer) {
             const filename = file.name.replace('.pdf', '_compressed.pdf');
             downloadBlob(file.compressedBuffer, filename);
+
+            // Clear all files after download with a small delay
+            setTimeout(() => {
+                clearFiles();
+            }, 500);
         }
-    }, [state.files]);
+    }, [state.files, clearFiles]);
 
     // Download all compressed files
     const downloadAllCompressed = useCallback(async () => {
@@ -433,19 +511,25 @@ export function CompressProvider({ children }: { children: React.ReactNode }) {
         if (compressedFiles.length === 0) return;
 
         if (compressedFiles.length === 1) {
-            downloadCompressed(compressedFiles[0].id);
-            return;
-        }
-
-        // For multiple files, we'll download them individually with a small delay
-        for (const file of compressedFiles) {
-            if (file.compressedBuffer) {
-                const filename = file.name.replace('.pdf', '_compressed.pdf');
-                downloadBlob(file.compressedBuffer, filename);
-                await new Promise(resolve => setTimeout(resolve, 500));
+            const file = compressedFiles[0];
+            const filename = file.name.replace('.pdf', '_compressed.pdf');
+            downloadBlob(file.compressedBuffer!, filename);
+        } else {
+            // For multiple files, we'll download them individually with a small delay
+            for (const file of compressedFiles) {
+                if (file.compressedBuffer) {
+                    const filename = file.name.replace('.pdf', '_compressed.pdf');
+                    downloadBlob(file.compressedBuffer, filename);
+                    await new Promise(resolve => setTimeout(resolve, 500));
+                }
             }
         }
-    }, [state.files, downloadCompressed]);
+
+        // Clear all files after download with a small delay
+        setTimeout(() => {
+            clearFiles();
+        }, 1000);
+    }, [state.files, clearFiles]);
 
     // Cancel compression
     const cancelCompression = useCallback(() => {
