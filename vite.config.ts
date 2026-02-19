@@ -38,7 +38,7 @@ export default defineConfig({
       '@': path.resolve(__dirname, './src'),
     },
   },
-  assetsInclude: ["**/*.jpg", "**/*.png", "**/*.svg", "**/*.gif", "**/*.webp"],
+  assetsInclude: ["**/*.jpg", "**/*.png", "**/*.svg", "**/*.gif", "**/*.webp", "**/*.wasm"],
   base: "/pdf-online/",
   build: {
     // Code splitting for optimal bundle size
