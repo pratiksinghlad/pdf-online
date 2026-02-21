@@ -3,14 +3,16 @@
  * Handles heavy PDF operations in a separate thread
  * Uses transferable objects to minimize memory copying
  */
-/* eslint-disable @typescript-eslint/no-explicit-any, prefer-const, react-refresh/only-export-components */
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { PDFDocument } from 'pdf-lib';
+import { MergeOrchestrator } from './processors/orchestrator';
 
 interface MergeInput {
     files: {
         id: string;
         buffer: ArrayBuffer;
         name: string;
+        type?: string;
     }[];
     pageOrder?: { fileId: string; pageIndex: number }[];
 }
@@ -24,6 +26,7 @@ interface MergeResult {
 
 interface GetPageCountInput {
     buffer: ArrayBuffer;
+    type?: string;
 }
 
 interface GetPageCountResult {
@@ -95,10 +98,14 @@ async function mergePDFs(input: MergeInput): Promise<MergeResult> {
     }
 
     try {
+        const orchestrator = new MergeOrchestrator();
+        console.log('Orchestrator pre-processing mixed files...');
+        const processedFiles = await orchestrator.processFiles(files);
+        
         const mergedPdf = await PDFDocument.create();
 
-        for (const file of files) {
-            console.log(`Worker processing "${file.name}"...`);
+        for (const file of processedFiles) {
+            console.log(`Worker processing standard PDF buffer for "${file.name}"...`);
             try {
                 if (!file.buffer || file.buffer.byteLength === 0) {
                     throw new Error('File buffer is empty');
@@ -182,6 +189,9 @@ async function mergePDFs(input: MergeInput): Promise<MergeResult> {
  * Get page count from a PDF
  */
 async function getPageCount(input: GetPageCountInput): Promise<GetPageCountResult> {
+    if (input.type === 'image') return { success: true, pageCount: 1 };
+    if (input.type === 'text') return { success: true, pageCount: 1 }; // Fast estimate
+    
     try {
         const pdf = await PDFDocument.load(new Uint8Array(input.buffer), {
             ignoreEncryption: true,

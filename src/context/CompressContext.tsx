@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/no-explicit-any, prefer-const, react-refresh/only-export-components */
+/* eslint-disable @typescript-eslint/no-explicit-any, react-refresh/only-export-components */
 import React, {
   createContext,
   useContext,

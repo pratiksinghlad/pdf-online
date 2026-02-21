@@ -4,7 +4,7 @@ import { useDropzone } from 'react-dropzone';
 import { motion } from 'framer-motion';
 import { useImageToPDF } from '../context/ImageToPDFContext';
 
-/* eslint-disable @typescript-eslint/no-explicit-any, prefer-const, react-refresh/only-export-components */
+/* eslint-disable @typescript-eslint/no-explicit-any */
 // Use a loose typing for the motion-wrapped Chakra component to avoid
 // incompatible prop type issues between Chakra's DOM handlers and
 // the motion component's prop definitions.

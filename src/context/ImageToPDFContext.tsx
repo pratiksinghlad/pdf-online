@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/no-explicit-any, prefer-const, react-refresh/only-export-components */
+/* eslint-disable react-refresh/only-export-components */
 import React, { createContext, useContext, useReducer, useCallback, useEffect } from 'react';
 import type { ImageFileInfo, ConvertProgress, ImageToPDFOptions } from '../types/image';
 import { generateId, formatFileSize, downloadBlob } from '../utils';

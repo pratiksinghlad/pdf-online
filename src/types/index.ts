@@ -12,6 +12,8 @@ export interface PDFFileInfo {
     isLoading: boolean;
     error: string | null;
     arrayBuffer: ArrayBuffer | null;
+    type?: 'pdf' | 'image' | 'text';
+    originalType?: string;
 }
 
 export interface PDFPage {
@@ -38,6 +40,8 @@ export interface MergeWorkerInput {
         id: string;
         buffer: ArrayBuffer;
         name: string;
+        type?: 'pdf' | 'image' | 'text';
+        originalType?: string;
     }[];
     pageOrder?: { fileId: string; pageIndex: number }[];
 }

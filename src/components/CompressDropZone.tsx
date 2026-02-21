@@ -4,7 +4,7 @@ import { useDropzone } from 'react-dropzone';
 import { motion } from 'framer-motion';
 import { useCompress } from '../context/CompressContext';
 
-/* eslint-disable @typescript-eslint/no-explicit-any, prefer-const, react-refresh/only-export-components */
+/* eslint-disable @typescript-eslint/no-explicit-any */
 const MotionBox: any = (motion as any)(Box);
 
 export function CompressDropZone() {

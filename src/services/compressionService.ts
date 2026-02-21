@@ -216,6 +216,7 @@ export class CompressionService {
                 canvas.height = Math.floor(viewport.height);
                 const context = canvas.getContext('2d')!;
 
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
                 await page.render({ canvasContext: context, viewport, canvas } as any).promise;
 
                 // Convert to JPEG blob

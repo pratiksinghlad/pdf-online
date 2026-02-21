@@ -42,6 +42,38 @@ export function isValidPDF(file: File): boolean {
 }
 
 /**
+ * Detect file type category based on file
+ */
+export function getFileCategory(file: File): 'pdf' | 'image' | 'text' | 'unknown' {
+    const type = file.type.toLowerCase();
+    const name = file.name.toLowerCase();
+    
+    if (type === 'application/pdf' || name.endsWith('.pdf')) {
+        return 'pdf';
+    }
+    
+    if (
+        type.startsWith('image/png') || type.startsWith('image/jpeg') || type.startsWith('image/webp') ||
+        name.endsWith('.png') || name.endsWith('.jpg') || name.endsWith('.jpeg') || name.endsWith('.webp')
+    ) {
+        return 'image';
+    }
+    
+    if (type === 'text/plain' || name.endsWith('.txt')) {
+        return 'text';
+    }
+    
+    return 'unknown';
+}
+
+/**
+ * Check if a file is a valid mergeable file (PDF, Image, Text)
+ */
+export function isMergeableFile(file: File): boolean {
+    return getFileCategory(file) !== 'unknown';
+}
+
+/**
  * Trigger a download for a blob/arraybuffer
  */
 export function downloadBlob(data: ArrayBuffer | Blob, filename: string): void {
