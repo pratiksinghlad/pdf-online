@@ -1,0 +1,30 @@
+{
+  "$schema": "https://raw.githubusercontent.com/electron-userland/electron-builder/master/packages/app-builder-lib/scheme.json",
+  "appId": "com.pdfonline.app",
+  "productName": "PDF Online",
+  "copyright": "Copyright © 2026 Pratik Singh Lad",
+  "directories": {
+    "output": "release"
+  },
+  "files": [
+    "dist/**/*",
+    "dist-electron/**/*"
+  ],
+  "win": {
+    "icon": "public/icon.ico",
+    "target": [
+      {
+        "target": "portable",
+        "arch": ["x64"]
+      }
+    ]
+  },
+  "mac": {
+    "icon": "public/icon.png",
+    "target": ["dmg"]
+  },
+  "linux": {
+    "icon": "public/icon.png",
+    "target": ["AppImage"]
+  }
+}

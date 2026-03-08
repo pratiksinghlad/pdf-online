@@ -1,8 +1,10 @@
 {
   "name": "pdf-merge-pro",
+  "author": "Pratik Singh Lad",
   "private": true,
   "version": "1.1.0",
   "type": "module",
+  "main": "dist-electron/main.js",
   "homepage": "https://pratiksinghlad.github.io/pdf-online/",
   "description": "A privacy-first PDF merger that runs entirely in your browser",
   "scripts": {
@@ -13,7 +15,10 @@
     "test": "vitest",
     "postbuild": "node scripts/copy-404.js",
     "deploy": "npm run build && node scripts/copy-404.js && gh-pages -d dist",
-    "lint": "eslint . --max-warnings=0 --fix"
+    "lint": "eslint . --max-warnings=0 --fix",
+    "electron:dev": "set ELECTRON=true&& set ELECTRON_RUN_AS_NODE=&& tsc -p tsconfig.electron.json && node -e \"require('fs').writeFileSync('dist-electron/package.json', JSON.stringify({type:'commonjs'}))\" && start /B cmd /c \"npx vite\" && node scripts/wait-for-server.js && electron .",
+    "electron:build": "set ELECTRON=true&& tsc -p tsconfig.electron.json && node -e \"require('fs').writeFileSync('dist-electron/package.json', JSON.stringify({type:'commonjs'}))\" && tsc -b && vite build && electron-builder --config electron-builder.config.json && rd /s /q release\\win-unpacked",
+    "fix-electron": "node -e \"const fs=require('fs'); ['electron/main.ts', 'electron/preload.ts'].forEach(f => { if(fs.existsSync(f)) fs.unlinkSync(f); }); fs.rmSync('dist-electron', {recursive:true, force:true});\" && tsc -p tsconfig.electron.json"
   },
   "dependencies": {
     "@chakra-ui/react": "^3.31.0",
@@ -38,6 +43,8 @@
     "@types/react": "^19.2.9",
     "@types/react-dom": "^19.2.3",
     "@vitejs/plugin-react": "^5.1.1",
+    "electron": "^36.9.5",
+    "electron-builder": "^24.13.3",
     "eslint": "^9.39.2",
     "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-react-hooks": "^7.0.1",
@@ -49,6 +56,7 @@
     "typescript-eslint": "^8.46.4",
     "vite": "^7.2.4",
     "vite-plugin-checker": "^0.12.0",
-    "vite-plugin-compression": "^0.5.1"
+    "vite-plugin-compression": "^0.5.1",
+    "wait-on": "^8.0.5"
   }
 }

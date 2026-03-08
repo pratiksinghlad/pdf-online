@@ -39,7 +39,7 @@ export default defineConfig({
     },
   },
   assetsInclude: ["**/*.jpg", "**/*.png", "**/*.svg", "**/*.gif", "**/*.webp", "**/*.wasm"],
-  base: "/pdf-online/",
+  base: process.env.ELECTRON ? './' : '/pdf-online/',
   build: {
     // Code splitting for optimal bundle size
     rollupOptions: {

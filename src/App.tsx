@@ -1,15 +1,26 @@
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import { ChakraProvider, Box } from '@chakra-ui/react';
-import { system } from './theme';
-import { PDFProvider } from './context/PDFContext';
-import { ImageToPDFProvider } from './context/ImageToPDFContext';
-import { Navbar, Footer } from './components';
-import { MergePage, AboutPage, HowItWorksPage, CompressPage, ImageToPDFPage } from './pages';
+import { BrowserRouter, HashRouter, Routes, Route } from "react-router-dom";
+import { ChakraProvider, Box } from "@chakra-ui/react";
+import { system } from "./theme";
+import { PDFProvider } from "./context/PDFContext";
+import { ImageToPDFProvider } from "./context/ImageToPDFContext";
+import { Navbar, Footer } from "./components";
+import {
+  MergePage,
+  AboutPage,
+  HowItWorksPage,
+  CompressPage,
+  ImageToPDFPage,
+} from "./pages";
 
 function App() {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const isDesktop = (window as any).desktopAPI?.isDesktop;
+  const Router = isDesktop ? HashRouter : BrowserRouter;
+  const basename = isDesktop ? undefined : import.meta.env.BASE_URL;
+
   return (
     <ChakraProvider value={system}>
-      <BrowserRouter basename={import.meta.env.BASE_URL}>
+      <Router basename={basename}>
         <PDFProvider>
           <ImageToPDFProvider>
             <Box minH="100vh" display="flex" flexDirection="column">
@@ -28,7 +39,7 @@ function App() {
             </Box>
           </ImageToPDFProvider>
         </PDFProvider>
-      </BrowserRouter>
+      </Router>
     </ChakraProvider>
   );
 }
