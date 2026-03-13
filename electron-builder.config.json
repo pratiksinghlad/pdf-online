@@ -6,9 +6,9 @@
   "directories": {
     "output": "release"
   },
+  "compression": "maximum",
   "files": [
-    "dist/**/*",
-    "dist-electron/**/*"
+    "out/**/*"
   ],
   "win": {
     "icon": "public/icon.ico",
@@ -16,8 +16,21 @@
       {
         "target": "portable",
         "arch": ["x64"]
+      },
+      {
+        "target": "nsis",
+        "arch": ["x64"]
       }
     ]
+  },
+  "nsis": {
+    "oneClick": true,
+    "perMachine": false,
+    "allowElevation": true,
+    "allowToChangeInstallationDirectory": false,
+    "createDesktopShortcut": true,
+    "createStartMenuShortcut": true,
+    "differentialPackage": true
   },
   "mac": {
     "icon": "public/icon.png",

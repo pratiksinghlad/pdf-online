@@ -1,56 +1,86 @@
-import { app, BrowserWindow } from 'electron';
-import * as path from 'path';
+import { app, BrowserWindow } from 'electron'
+import { join } from 'path'
 
-const isDev = !app.isPackaged;
+// Disable legacy node integration and features that slow down the process
+// Using specific command line switches
+app.commandLine.appendSwitch('disable-site-isolation-trials')
+app.commandLine.appendSwitch('disable-gpu-compositing')    // Avoids heavy GPU boot delay
+app.commandLine.appendSwitch('disable-software-rasterizer') // Speeds up headless rendering
+app.commandLine.appendSwitch('disable-2d-canvas-clip-aa')
+app.commandLine.appendSwitch('disable-features', 'HardwareMediaKeyHandling')
+
+let mainWindow: BrowserWindow | null = null
+let splashWindow: BrowserWindow | null = null
 
 function createWindow() {
-  const mainWindow = new BrowserWindow({
-    width: 1280,
-    height: 820,
-    minWidth: 800,
-    minHeight: 600,
-    title: 'PDF Online',
-    icon: path.join(__dirname, '..', isDev ? 'public' : 'dist', 'icon.png'),
-    webPreferences: {
-      preload: path.join(__dirname, 'preload.js'),
-      contextIsolation: true,
-      sandbox: true,
-      nodeIntegration: false,
-      plugins: true, // Required for built-in PDF rendering
-    },
-  });
+  const startTime = Date.now()
 
-  if (isDev) {
-    // Dev mode: load Vite dev server
-    mainWindow.loadURL('http://localhost:3001');
-    mainWindow.webContents.openDevTools();
+  // 1. Create and show Splash Window immediately
+  splashWindow = new BrowserWindow({
+    width: 600,
+    height: 400,
+    transparent: true,
+    frame: false,
+    alwaysOnTop: true,
+    webPreferences: {
+      nodeIntegration: false,
+      contextIsolation: true
+    }
+  })
+
+  // Load the lightweight splash screen
+  if (process.env.ELECTRON_RENDERER_URL) {
+    splashWindow.loadURL(`${process.env.ELECTRON_RENDERER_URL}/splash.html`)
   } else {
-    // Production: load the built index.html via file:// protocol
-    mainWindow.loadFile(path.join(__dirname, '..', 'dist', 'index.html'));
+    splashWindow.loadFile(join(__dirname, '../renderer/splash.html'))
   }
 
-  // Gracefully handle load failures
-  mainWindow.webContents.on('did-fail-load', (_event, errorCode, errorDescription) => {
-    console.error(`Failed to load: ${errorCode} - ${errorDescription}`);
-    if (isDev) {
-      console.log('Retrying in 1 second...');
-      setTimeout(() => mainWindow.loadURL('http://localhost:3001'), 1000);
+  // 2. Create the Main Window heavily in the background
+  mainWindow = new BrowserWindow({
+    width: 1024,
+    height: 768,
+    show: false, // Prevents white flash and hides during loading
+    webPreferences: {
+      preload: join(__dirname, '../preload/preload.cjs'),
+      nodeIntegration: false,
+      contextIsolation: true,
+      sandbox: true
     }
-  });
+  })
+
+  // Wait for the renderer process to be fully ready before showing
+  mainWindow.on('ready-to-show', () => {
+    // Artificial 500ms delay to ensure React finishes hydrating layout
+    setTimeout(() => {
+      if (splashWindow && !splashWindow.isDestroyed()) {
+        splashWindow.close()
+      }
+      mainWindow!.show()
+      mainWindow!.focus()
+      console.log(`⏱️ Time to App Fully Interactive: ${Date.now() - startTime}ms`)
+    }, 500)
+  })
+
+  // Load the main React app
+  if (process.env.ELECTRON_RENDERER_URL) {
+    mainWindow.loadURL(process.env.ELECTRON_RENDERER_URL)
+  } else {
+    mainWindow.loadFile(join(__dirname, '../renderer/index.html'))
+  }
 }
 
-app.whenReady().then(createWindow);
+app.whenReady().then(() => {
+  createWindow()
 
-// macOS: re-create window when dock icon is clicked and no windows are open
-app.on('activate', () => {
-  if (BrowserWindow.getAllWindows().length === 0) {
-    createWindow();
-  }
-});
+  app.on('activate', () => {
+    if (BrowserWindow.getAllWindows().length === 0) {
+      createWindow()
+    }
+  })
+})
 
-// Windows/Linux: quit when all windows are closed
 app.on('window-all-closed', () => {
   if (process.platform !== 'darwin') {
-    app.quit();
+    app.quit()
   }
-});
+})

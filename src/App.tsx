@@ -16,7 +16,11 @@ function App() {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const isDesktop = (window as any).desktopAPI?.isDesktop;
   const Router = isDesktop ? HashRouter : BrowserRouter;
-  const basename = isDesktop ? undefined : import.meta.env.BASE_URL;
+
+  // Vite sets import.meta.env.BASE_URL to './' for Electron builds
+  // React Router doesn't like './' as a basename, it expects '/' or ''
+  const viteBaseUrl = import.meta.env.BASE_URL;
+  const basename = isDesktop || viteBaseUrl === "./" ? undefined : viteBaseUrl;
 
   return (
     <ChakraProvider value={system}>
