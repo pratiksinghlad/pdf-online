@@ -31,7 +31,16 @@ export default defineConfig({
     }),
   ].filter(Boolean),
   server: {
-    port: 3001,
+    port: 5173,
+    strictPort: true,
+    host: process.env.TAURI_DEV_HOST || false,
+    hmr: process.env.TAURI_DEV_HOST
+      ? {
+          protocol: "ws",
+          host: process.env.TAURI_DEV_HOST,
+          port: 5183,
+        }
+      : undefined,
   },
   resolve: {
     alias: {
@@ -39,7 +48,10 @@ export default defineConfig({
     },
   },
   assetsInclude: ["**/*.jpg", "**/*.png", "**/*.svg", "**/*.gif", "**/*.webp", "**/*.wasm"],
-  base: process.env.ELECTRON ? './' : '/pdf-online/',
+  base: process.env.TAURI_ENV_PLATFORM ? './' : '/pdf-online/',
+  
+  clearScreen: false,
+  
   build: {
     // Code splitting for optimal bundle size
     rollupOptions: {

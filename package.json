@@ -4,7 +4,6 @@
   "private": true,
   "version": "1.1.0",
   "type": "module",
-  "main": "out/main/main.js",
   "homepage": "https://pratiksinghlad.github.io/pdf-online/",
   "description": "A privacy-first PDF merger that runs entirely in your browser",
   "scripts": {
@@ -13,16 +12,18 @@
     "build:cf": "npm run build",
     "preview": "vite preview",
     "test": "vitest",
-    "postbuild": "node scripts/copy-404.js",
-    "deploy": "npm run build && node scripts/copy-404.js && gh-pages -d dist",
+    "deploy": "npm run build && gh-pages -d dist",
     "lint": "eslint . --max-warnings=0 --fix",
-    "electron:dev": "node -e \"const fs=require('fs'); if(!fs.existsSync('out')) fs.mkdirSync('out'); fs.writeFileSync('out/package.json', JSON.stringify({type:'module'}))\" && electron-vite dev --config electron.vite.config.ts",
-    "electron:build": "node -e \"const fs=require('fs'); if(!fs.existsSync('out')) fs.mkdirSync('out'); fs.writeFileSync('out/package.json', JSON.stringify({type:'module'}))\" && electron-vite build --config electron.vite.config.ts && electron-builder --config electron-builder.config.json",
-    "fix-electron": "node -e \"const fs=require('fs'); fs.rmSync('out', {recursive:true, force:true});\""
+    "tauri": "tauri",
+    "tauri:dev": "tauri dev",
+    "tauri:build": "tauri build",
+    "tauri:buildwin": "set WEBVIEW2_STATIC=1 && tauri build"
   },
   "dependencies": {
     "@chakra-ui/react": "^3.31.0",
     "@dnd-kit/core": "^6.3.1",
+    "@tauri-apps/api": "^2.0.0",
+    "@tauri-apps/plugin-shell": "^2.0.0",
     "@dnd-kit/sortable": "^10.0.0",
     "@dnd-kit/utilities": "^3.2.2",
     "@emotion/react": "^11.14.0",
@@ -39,6 +40,7 @@
   },
   "devDependencies": {
     "@eslint/js": "^9.39.1",
+    "@tauri-apps/cli": "^2.0.0",
     "@types/node": "^24.10.1",
     "@types/react": "^19.2.9",
     "@types/react-dom": "^19.2.3",

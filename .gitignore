@@ -13,6 +13,8 @@ debug.txt
 info.txt
 out.txt
 
+src-tauri/target
+
 node_modules
 dist
 dist-ssr

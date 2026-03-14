@@ -12,12 +12,13 @@ import {
   ImageToPDFPage,
 } from "./pages";
 
+import { isTauri } from '@tauri-apps/api/core';
+
 function App() {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const isDesktop = (window as any).desktopAPI?.isDesktop;
+  const isDesktop = isTauri();
   const Router = isDesktop ? HashRouter : BrowserRouter;
 
-  // Vite sets import.meta.env.BASE_URL to './' for Electron builds
+  // Vite sets import.meta.env.BASE_URL to './' for Tauri Desktop builds
   // React Router doesn't like './' as a basename, it expects '/' or ''
   const viteBaseUrl = import.meta.env.BASE_URL;
   const basename = isDesktop || viteBaseUrl === "./" ? undefined : viteBaseUrl;
