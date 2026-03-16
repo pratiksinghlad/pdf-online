@@ -34,13 +34,42 @@ if not exist !VCVARS! (
 echo Loading MSVC environment...
 call !VCVARS! x64
 
+echo ========================================
+echo Environment Check:
+echo.
+echo PATH: %PATH%
+echo LIB: %LIB%
+echo INCLUDE: %INCLUDE%
+echo WindowsSdkDir: "%WindowsSdkDir%"
+echo WindowsSDKVersion: "%WindowsSDKVersion%"
+echo UCRTVersion: "%UCRTVersion%"
+echo ========================================
+
+:: Check if WindowsSdkDir is empty
+if "%WindowsSdkDir%"=="" (
+    echo.
+    echo ERROR: Windows SDK not detected^!
+    echo kernel32.lib will not be found, causing the build to fail.
+    echo.
+    echo FIX:
+    echo 1. Open "Visual Studio Installer"
+    echo 2. Click "Modify" on your installation (D:\software\vs2026)
+    echo 3. In "Individual components", search for and check:
+    echo    - "Windows 11 SDK (10.0.22621.0)" or latest
+    echo    - "MSVC v143 - VS 2022 C++ x64/x86 build tools"
+    echo 4. Click "Modify" to install.
+    echo.
+    exit /b 1
+)
+
 echo Running Tauri build...
 set WEBVIEW2_STATIC=1
-npm run tauri:buildwin
+npx tauri build
 
 if %ERRORLEVEL% equ 0 (
     echo Build successful!
 ) else (
-    echo Build failed.
+    echo.
+    echo Build failed. If you saw "kernel32.lib" missing, ensure the Windows SDK is installed.
     exit /b %ERRORLEVEL%
 )
