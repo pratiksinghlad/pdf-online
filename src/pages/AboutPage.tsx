@@ -10,6 +10,7 @@ import {
 } from "@chakra-ui/react";
 import { motion } from "framer-motion";
 import { GITHUB_PROFILE_ID } from "../utils/constants";
+import { openExternalLink } from "../utils";
 
 const MotionBox = motion.create(Box);
 
@@ -274,9 +275,8 @@ export function AboutPage() {
               <br />
               <Link
                 color="brand.500"
-                href={`https://github.com/${GITHUB_PROFILE_ID}/pdf-online`}
-                target="_blank"
-                rel="noopener"
+                onClick={() => openExternalLink(`https://github.com/${GITHUB_PROFILE_ID}/pdf-online`)}
+                cursor="pointer"
               >
                 View on GitHub →
               </Link>

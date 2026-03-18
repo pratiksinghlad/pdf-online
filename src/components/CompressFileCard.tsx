@@ -11,7 +11,7 @@ interface CompressFileCardProps {
 }
 
 export function CompressFileCard({ file }: CompressFileCardProps) {
-    const { removeFile, downloadCompressed } = useCompress();
+    const { removeFile } = useCompress();
 
     return (
         <MotionBox
@@ -111,16 +111,18 @@ export function CompressFileCard({ file }: CompressFileCardProps) {
                                 >
                                     {formatFileSize(file.compressedSize)}
                                 </Badge>
-                                {file.compressionRatio !== null && file.compressionRatio > 0 && (
+                                {file.compressionRatio !== null && (
                                     <Badge
-                                        colorPalette="green"
+                                        colorPalette={file.compressionRatio > 0 ? "green" : "blue"}
                                         variant="solid"
                                         fontSize="xs"
                                         px={2}
                                         py={0.5}
                                         borderRadius="full"
                                     >
-                                        -{file.compressionRatio.toFixed(1)}%
+                                        {file.compressionRatio > 0 
+                                            ? `-${file.compressionRatio.toFixed(1)}%` 
+                                            : "Already Optimized"}
                                     </Badge>
                                 )}
                             </HStack>
@@ -144,21 +146,6 @@ export function CompressFileCard({ file }: CompressFileCardProps) {
 
                     {/* Actions */}
                     <HStack gap={1}>
-                        {/* Download Button (show when compressed) */}
-                        {file.isCompressed && file.compressedBuffer && (
-                            <IconButton
-                                aria-label="Download compressed file"
-                                variant="ghost"
-                                size="sm"
-                                color="green.500"
-                                onClick={() => downloadCompressed(file.id)}
-                                _hover={{ bg: 'green.50' }}
-                            >
-                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                                    <path strokeLinecap="round" strokeLinejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
-                                </svg>
-                            </IconButton>
-                        )}
 
                         {/* Remove Button */}
                         <IconButton

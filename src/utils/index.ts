@@ -7,12 +7,15 @@
  */
 export function formatFileSize(bytes: number): string {
     if (bytes === 0) return '0 Bytes';
+    const isNegative = bytes < 0;
+    const absoluteBytes = Math.abs(bytes);
 
     const k = 1024;
     const sizes = ['Bytes', 'KB', 'MB', 'GB'];
-    const i = Math.floor(Math.log(bytes) / Math.log(k));
+    const i = Math.floor(Math.log(absoluteBytes) / Math.log(k));
 
-    return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+    const formattedValue = parseFloat((absoluteBytes / Math.pow(k, i)).toFixed(2));
+    return (isNegative ? '-' : '') + formattedValue + ' ' + sizes[i];
 }
 
 /**
@@ -147,4 +150,29 @@ export function readFileAsArrayBuffer(file: File): Promise<ArrayBuffer> {
         reader.onerror = () => reject(new Error('Failed to read file'));
         reader.readAsArrayBuffer(file);
     });
+}
+
+/**
+ * Check if the application is running in Tauri
+ */
+export function isTauri(): boolean {
+    // @ts-expect-error - __TAURI_INTERNALS__ is injected by Tauri at runtime
+    return typeof window !== 'undefined' && window.__TAURI_INTERNALS__ !== undefined;
+}
+
+/**
+ * Open a URL in the external system browser if in Tauri, or a new tab if in Web
+ */
+export async function openExternalLink(url: string): Promise<void> {
+    if (isTauri()) {
+        try {
+            const { open } = await import('@tauri-apps/plugin-shell');
+            await open(url);
+        } catch (error) {
+            console.error('Failed to open external link via Tauri shell:', error);
+            window.open(url, '_blank', 'noopener,noreferrer');
+        }
+    } else {
+        window.open(url, '_blank', 'noopener,noreferrer');
+    }
 }

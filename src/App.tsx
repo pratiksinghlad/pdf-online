@@ -14,6 +14,7 @@ import {
 
 import { isTauri } from '@tauri-apps/api/core';
 
+
 function App() {
   const isDesktop = isTauri();
   const Router = isDesktop ? HashRouter : BrowserRouter;

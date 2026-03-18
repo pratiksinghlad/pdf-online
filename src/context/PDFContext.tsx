@@ -495,7 +495,7 @@ export function PDFProvider({ children }: { children: React.ReactNode }) {
                 type: "SET_MERGE_PROGRESS",
                 payload: initialState.mergeProgress,
               });
-            }, 1000);
+            }, 3000);
           } else {
             dispatch({
               type: "SET_MERGE_PROGRESS",
