@@ -16,8 +16,7 @@
     "lint": "eslint . --max-warnings=0 --fix",
     "tauri": "tauri",
     "tauri:dev": "tauri dev",
-    "tauri:build": "tauri build",
-    "tauri:buildwin": "build_windows.bat"
+    "tauri:build": "tauri build"
   },
   "dependencies": {
     "@chakra-ui/react": "^3.31.0",
