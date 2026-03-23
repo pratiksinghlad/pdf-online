@@ -1,11 +1,11 @@
 {
-  "name": "pdf-merge-pro",
+  "name": "pdf-online",
   "author": "Pratik Singh Lad",
   "private": true,
-  "version": "1.1.0",
+  "version": "0.1.0",
   "type": "module",
   "homepage": "https://pratiksinghlad.github.io/pdf-online/",
-  "description": "A privacy-first PDF merger that runs entirely in your browser",
+  "description": "A privacy-first PDF merger/compress/image to pdf that runs entirely in your browser/desktop",
   "scripts": {
     "start": "vite",
     "build": "tsc -b && vite build",

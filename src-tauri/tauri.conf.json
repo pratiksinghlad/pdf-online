@@ -28,7 +28,9 @@
     "targets": ["nsis"],
     "publisher": "Pratik Singh Lad",
     "windows": {
-      "nsis": {}
+      "nsis": {
+        "installerIcon": "icons/icon.ico"
+      }
     },
     "icon": [
       "icons/icon.png",
