@@ -86,7 +86,7 @@ export class TextToPdfProcessor implements FileProcessor {
                 pdfBytes.byteOffset + pdfBytes.byteLength
             ) as ArrayBuffer;
         } catch (error) {
-            console.error(`Text processing failed for ${name}:`, error);
+            console.error('Text processing failed for file:', name, error);
             throw new Error(`Failed to convert text file ${name} to PDF`);
         }
     }
