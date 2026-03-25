@@ -397,7 +397,6 @@ export function ImageToPDFProvider({ children }: { children: React.ReactNode }) 
             // Generate and download PDF
             const pdfBlob = pdf!.output('blob');
             const filename = generatePDFFilename();
-
             downloadBlob(pdfBlob, filename);
 
             dispatch({
@@ -409,7 +408,7 @@ export function ImageToPDFProvider({ children }: { children: React.ReactNode }) 
             setTimeout(() => {
                 clearFiles();
                 dispatch({ type: 'SET_CONVERT_PROGRESS', payload: initialState.convertProgress });
-            }, 1000);
+            }, 3000);
 
         } catch (error) {
             console.error('Error converting to PDF:', error);

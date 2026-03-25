@@ -160,7 +160,6 @@ interface CompressContextValue extends CompressState {
   setCompressionLevel: (level: CompressionLevel) => void;
   setCustomDpi: (dpi: number) => void;
   compressPDFs: (forceAll?: boolean) => Promise<void>;
-  downloadCompressed: (id: string) => void;
   downloadAllCompressed: () => void;
   cancelCompression: () => void;
 }
@@ -402,6 +401,42 @@ export function CompressProvider({ children }: { children: React.ReactNode }) {
     dispatch({ type: "SET_CUSTOM_DPI", payload: dpi });
   }, []);
 
+  // Helper for actual download (private)
+  const downloadFile = useCallback((file: CompressedFileInfo) => {
+    if (file.compressedBuffer) {
+      const filename = file.name.replace(".pdf", "_compressed.pdf");
+      downloadBlob(file.compressedBuffer, filename);
+    }
+  }, []);
+
+  // Download all compressed files
+  const downloadAllCompressed = useCallback(async () => {
+    const compressedFiles = state.files.filter(
+      (f) => f.isCompressed && f.compressedBuffer,
+    );
+
+    if (compressedFiles.length === 0) return;
+
+    if (compressedFiles.length === 1) {
+      downloadFile(compressedFiles[0]);
+    } else {
+      // For multiple files, download individually with delay
+      for (const file of compressedFiles) {
+        downloadFile(file);
+        await new Promise((resolve) => setTimeout(resolve, 300));
+      }
+    }
+
+    // Clear all files and reset progress after download
+    setTimeout(() => {
+      clearFiles();
+      dispatch({
+        type: "SET_COMPRESSION_PROGRESS",
+        payload: initialState.compressionProgress,
+      });
+    }, 3000);
+  }, [state.files, clearFiles, downloadFile]);
+
   // ─── Compress PDFs via CompressionService (Web Worker) ──────────────────
   const compressPDFs = useCallback(
     async (forceAll = false) => {
@@ -495,9 +530,18 @@ export function CompressProvider({ children }: { children: React.ReactNode }) {
           );
 
           if (result.success) {
-            const compressedSize = result.compressedSize;
-            const compressionRatio =
-              ((file.originalSize - compressedSize) / file.originalSize) * 100;
+            const originalSize = file.originalSize;
+            let compressedSize = result.compressedSize;
+            let finalBuffer = result.data;
+            let finalRatio = ((originalSize - compressedSize) / originalSize) * 100;
+
+            // If compressed is larger than original, keep the original
+            if (compressedSize >= originalSize) {
+              console.log(`File bloated: ${file.name}. Original: ${originalSize}, Compressed: ${compressedSize}. Keeping original.`);
+              compressedSize = originalSize;
+              finalBuffer = buffer;
+              finalRatio = 0;
+            }
 
             dispatch({
               type: "UPDATE_FILE",
@@ -506,9 +550,9 @@ export function CompressProvider({ children }: { children: React.ReactNode }) {
                 updates: {
                   isCompressing: false,
                   isCompressed: true,
-                  compressedBuffer: result.data,
+                  compressedBuffer: finalBuffer,
                   compressedSize,
-                  compressionRatio,
+                  compressionRatio: finalRatio,
                 },
               },
             });
@@ -545,65 +589,36 @@ export function CompressProvider({ children }: { children: React.ReactNode }) {
         }
       }
 
-      dispatch({
-        type: "SET_COMPRESSION_PROGRESS",
-        payload: {
-          status: "complete",
-          progress: 100,
-          message: "Compression complete!",
-          currentFileIndex: totalFiles,
-          totalFiles,
-        },
-      });
-    },
-    [state.files, state.compressionOptions],
-  );
+      // Automatically trigger download after successful compression
+      const hasCompressedFiles = state.files.some(
+        (f) => f.isCompressed && f.compressedBuffer,
+      );
 
-  // Download single compressed file
-  const downloadCompressed = useCallback(
-    (id: string) => {
-      const file = state.files.find((f) => f.id === id);
-      if (file?.compressedBuffer) {
-        const filename = file.name.replace(".pdf", "_compressed.pdf");
-        downloadBlob(file.compressedBuffer, filename);
+      if (hasCompressedFiles && !compressAbortRef.current) {
+        dispatch({
+          type: "SET_COMPRESSION_PROGRESS",
+          payload: {
+            status: "complete",
+            progress: 100,
+            message: "Compression complete! Downloading...",
+            currentFileIndex: totalFiles,
+            totalFiles,
+          },
+        });
 
-        // Clear all files after download with a small delay
+        // Small delay to ensure state is caught up before download
         setTimeout(() => {
-          clearFiles();
-        }, 500);
+          downloadAllCompressed();
+        }, 100);
+      } else if (!compressAbortRef.current) {
+        dispatch({
+          type: "SET_COMPRESSION_PROGRESS",
+          payload: initialState.compressionProgress,
+        });
       }
     },
-    [state.files, clearFiles],
+    [state.files, state.compressionOptions, downloadAllCompressed],
   );
-
-  // Download all compressed files
-  const downloadAllCompressed = useCallback(async () => {
-    const compressedFiles = state.files.filter(
-      (f) => f.isCompressed && f.compressedBuffer,
-    );
-
-    if (compressedFiles.length === 0) return;
-
-    if (compressedFiles.length === 1) {
-      const file = compressedFiles[0];
-      const filename = file.name.replace(".pdf", "_compressed.pdf");
-      downloadBlob(file.compressedBuffer!, filename);
-    } else {
-      // For multiple files, download individually with delay
-      for (const file of compressedFiles) {
-        if (file.compressedBuffer) {
-          const filename = file.name.replace(".pdf", "_compressed.pdf");
-          downloadBlob(file.compressedBuffer, filename);
-          await new Promise((resolve) => setTimeout(resolve, 500));
-        }
-      }
-    }
-
-    // Clear all files after download
-    setTimeout(() => {
-      clearFiles();
-    }, 1000);
-  }, [state.files, clearFiles]);
 
   // Cancel compression
   const cancelCompression = useCallback(() => {
@@ -644,7 +659,6 @@ export function CompressProvider({ children }: { children: React.ReactNode }) {
     setCompressionLevel,
     setCustomDpi,
     compressPDFs,
-    downloadCompressed,
     downloadAllCompressed,
     cancelCompression,
   };

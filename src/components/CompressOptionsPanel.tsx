@@ -51,7 +51,6 @@ export function CompressOptionsPanel() {
     setCompressionLevel,
     setCustomDpi,
     compressPDFs,
-    downloadAllCompressed,
     cancelCompression,
   } = useCompress();
 
@@ -67,7 +66,7 @@ export function CompressOptionsPanel() {
     .filter((f) => f.isCompressed && f.compressedSize)
     .reduce((sum, f) => sum + (f.compressedSize || 0), 0);
   const overallReduction =
-    totalOriginalSize > 0 && totalCompressedSize > 0
+    totalOriginalSize > 0 && totalCompressedSize > 0 && totalCompressedSize < totalOriginalSize
       ? ((totalOriginalSize - totalCompressedSize) / totalOriginalSize) * 100
       : 0;
 
@@ -277,10 +276,10 @@ export function CompressOptionsPanel() {
               <HStack justify="space-between">
                 <VStack align="start" gap={0}>
                   <Text fontSize="xs" color="gray.500">
-                    Reduced by
+                    {overallReduction > 0 ? "Reduced by" : "Result"}
                   </Text>
-                  <Text fontWeight="700" fontSize="lg" color="green.600">
-                    {overallReduction.toFixed(1)}%
+                  <Text fontWeight="700" fontSize="lg" color={overallReduction > 0 ? "green.600" : "blue.600"}>
+                    {overallReduction > 0 ? `${overallReduction.toFixed(1)}%` : "Already Optimized"}
                   </Text>
                 </VStack>
                 <VStack align="end" gap={0}>
@@ -288,9 +287,10 @@ export function CompressOptionsPanel() {
                     {formatFileSize(totalOriginalSize)} →{" "}
                     {formatFileSize(totalCompressedSize)}
                   </Text>
-                  <Text fontSize="xs" color="green.600" fontWeight="600">
-                    Saved{" "}
-                    {formatFileSize(totalOriginalSize - totalCompressedSize)}
+                  <Text fontSize="xs" color={overallReduction > 0 ? "green.600" : "blue.600"} fontWeight="600">
+                    {overallReduction > 0 
+                      ? `Saved ${formatFileSize(totalOriginalSize - totalCompressedSize)}`
+                      : "Files are already at their smallest size"}
                   </Text>
                 </VStack>
               </HStack>
@@ -320,34 +320,74 @@ export function CompressOptionsPanel() {
           ) : hasCompressedFiles ? (
             <Button
               w="100%"
-              bg="linear-gradient(135deg, #38a169 0%, #2f855a 100%)"
+              bg={
+                compressionProgress.status === "complete"
+                  ? "green.500"
+                  : "linear-gradient(135deg, #e53e3e 0%, #c53030 100%)"
+              }
               color="white"
               size="lg"
-              onClick={downloadAllCompressed}
+              onClick={
+                compressionProgress.status === "complete" ||
+                compressionProgress.status === "compressing" ||
+                compressionProgress.status === "loading"
+                  ? undefined
+                  : () => compressPDFs()
+              }
               _hover={{
-                bg: "linear-gradient(135deg, #2f855a 0%, #276749 100%)",
-                transform: "translateY(-2px)",
+                bg:
+                  compressionProgress.status === "complete"
+                    ? "green.600"
+                    : "linear-gradient(135deg, #c53030 0%, #9b2c2c 100%)",
+                transform:
+                  compressionProgress.status === "complete"
+                    ? "none"
+                    : "translateY(-2px)",
                 shadow: "lg",
               }}
             >
               <HStack>
                 <Icon>
-                  <svg
-                    width="18"
-                    height="18"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"
-                    />
-                  </svg>
+                  {compressionProgress.status === "complete" ? (
+                    <svg
+                      width="18"
+                      height="18"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="3"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        d="M5 13l4 4L19 7"
+                      />
+                    </svg>
+                  ) : (
+                    <svg
+                      width="18"
+                      height="18"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"
+                      />
+                    </svg>
+                  )}
                 </Icon>
-                <span>Download All</span>
+                <span>
+                  {compressionProgress.status === "complete"
+                    ? "✓ Downloaded!"
+                    : compressionProgress.status === "compressing" ||
+                        compressionProgress.status === "loading"
+                      ? "Compressing..."
+                      : "Compress PDF"}
+                </span>
               </HStack>
             </Button>
           ) : (
