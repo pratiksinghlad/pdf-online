@@ -9,6 +9,7 @@ const navLinks = [
     { label: 'Merge PDF', path: '/merge' },
     { label: 'Compress PDF', path: '/compress' },
     { label: 'Image to PDF', path: '/image-to-pdf' },
+    { label: 'Encrypt PDF', path: '/encrypt' },
     { label: 'About', path: '/about' },
     { label: 'How It Works', path: '/how-it-works' },
 ];

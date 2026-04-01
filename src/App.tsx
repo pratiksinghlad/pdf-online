@@ -3,6 +3,7 @@ import { ChakraProvider, Box } from "@chakra-ui/react";
 import { system } from "./theme";
 import { PDFProvider } from "./context/PDFContext";
 import { ImageToPDFProvider } from "./context/ImageToPDFContext";
+import { EncryptProvider } from "./context/EncryptContext";
 import { Navbar, Footer } from "./components";
 import {
   MergePage,
@@ -10,6 +11,7 @@ import {
   HowItWorksPage,
   CompressPage,
   ImageToPDFPage,
+  EncryptPage,
 } from "./pages";
 
 import { isTauri } from '@tauri-apps/api/core';
@@ -29,20 +31,23 @@ function App() {
       <Router basename={basename}>
         <PDFProvider>
           <ImageToPDFProvider>
-            <Box minH="100vh" display="flex" flexDirection="column">
-              <Navbar />
-              <Box flex="1">
-                <Routes>
-                  <Route path="/" element={<MergePage />} />
-                  <Route path="/merge" element={<MergePage />} />
-                  <Route path="/compress" element={<CompressPage />} />
-                  <Route path="/image-to-pdf" element={<ImageToPDFPage />} />
-                  <Route path="/about" element={<AboutPage />} />
-                  <Route path="/how-it-works" element={<HowItWorksPage />} />
-                </Routes>
+            <EncryptProvider>
+              <Box minH="100vh" display="flex" flexDirection="column">
+                <Navbar />
+                <Box flex="1">
+                  <Routes>
+                    <Route path="/" element={<MergePage />} />
+                    <Route path="/merge" element={<MergePage />} />
+                    <Route path="/compress" element={<CompressPage />} />
+                    <Route path="/image-to-pdf" element={<ImageToPDFPage />} />
+                    <Route path="/encrypt" element={<EncryptPage />} />
+                    <Route path="/about" element={<AboutPage />} />
+                    <Route path="/how-it-works" element={<HowItWorksPage />} />
+                  </Routes>
+                </Box>
+                <Footer />
               </Box>
-              <Footer />
-            </Box>
+            </EncryptProvider>
           </ImageToPDFProvider>
         </PDFProvider>
       </Router>
