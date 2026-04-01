@@ -90,3 +90,5 @@ export interface DragItem {
     type: 'file' | 'page';
     index: number;
 }
+
+export * from './encrypt';

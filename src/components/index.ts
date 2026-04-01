@@ -16,3 +16,9 @@ export { ImageDropZone } from './ImageDropZone';
 export { ImageCard } from './ImageCard';
 export { ImageFileList } from './ImageFileList';
 export { ConvertButton } from './ConvertButton';
+
+// Encrypt components
+export { EncryptDropZone } from './EncryptDropZone';
+export { EncryptFileCard } from './EncryptFileCard';
+export { EncryptFileList } from './EncryptFileList';
+export { PasswordInput } from './PasswordInput';
