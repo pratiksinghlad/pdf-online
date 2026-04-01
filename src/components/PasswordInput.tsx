@@ -60,6 +60,9 @@ export function PasswordInput({
           value={value}
           onChange={(e) => onChange(e.target.value)}
           placeholder={placeholder}
+          autoComplete="new-password"
+          data-lpignore="true"
+          spellCheck={false}
           px={2}
           flex={1}
           height="100%"

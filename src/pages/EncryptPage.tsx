@@ -25,7 +25,7 @@ export function EncryptPage() {
                 color="gray.800"
                 lineHeight="1.2"
               >
-                Encrypt PDF Files
+                Password Protect PDF Files
               </Heading>
               <Text
                 fontSize={{ base: "md", md: "lg" }}

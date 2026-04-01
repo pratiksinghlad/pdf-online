@@ -76,7 +76,7 @@ export function EncryptFileList() {
                         loading={isProcessing}
                         loadingText="Encrypting..."
                     >
-                        Encrypt PDFs
+                        Password Protect PDFs
                     </Button>
                 </Flex>
             )}
