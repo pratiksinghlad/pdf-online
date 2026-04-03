@@ -10,6 +10,7 @@ const navLinks = [
     { label: 'Compress', path: '/compress' },
     { label: 'Image to PDF', path: '/image-to-pdf' },
     { label: 'Password Protect', path: '/encrypt' },
+    { label: 'Unlock PDF', path: '/unlock-pdf' },
     { label: 'About', path: '/about' },
     { label: 'How It Works', path: '/how-it-works' },
 ];

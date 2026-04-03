@@ -3,6 +3,8 @@ import react from '@vitejs/plugin-react';
 import path from 'path';
 import checker from "vite-plugin-checker";
 import viteCompression from "vite-plugin-compression";
+import wasm from "vite-plugin-wasm";
+import topLevelAwait from "vite-plugin-top-level-await";
 
 // https://vite.dev/config/
 export default defineConfig({
@@ -29,6 +31,9 @@ export default defineConfig({
       ext: ".gz",
       threshold: 1024,
     }),
+    wasm(),
+    topLevelAwait(),
+
   ].filter(Boolean),
   server: {
     port: 5173,
@@ -97,6 +102,7 @@ export default defineConfig({
   // Worker configuration
   worker: {
     format: 'es',
+    plugins: () => [wasm(), topLevelAwait()],
   },
   // Optimize dependencies
   optimizeDeps: {
