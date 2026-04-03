@@ -89,6 +89,7 @@ export function Navbar() {
                                 color={location.pathname === link.path ? 'brand.600' : 'gray.600'}
                                 fontWeight={location.pathname === link.path ? '700' : '500'}
                                 fontSize="16px"
+                                aria-current={location.pathname === link.path ? 'page' : undefined}
                                 _hover={{
                                     bg: 'brand.50',
                                     color: 'brand.600',
@@ -194,6 +195,7 @@ export function Navbar() {
                                 color={location.pathname === link.path ? 'brand.600' : 'gray.600'}
                                 fontWeight={location.pathname === link.path ? '700' : '500'}
                                 fontSize="16px"
+                                aria-current={location.pathname === link.path ? 'page' : undefined}
                                 _hover={{ bg: 'gray.50' }}
                                 onClick={onToggle}
                                 transition="all 0.2s"

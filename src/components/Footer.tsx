@@ -9,7 +9,6 @@ import {
 } from "@chakra-ui/react";
 import { Link as RouterLink } from "react-router-dom";
 import { GITHUB_PROFILE_ID, MY_NAME } from "../utils/constants";
-import { openExternalLink } from "../utils";
 
 export function Footer() {
   return (
@@ -54,11 +53,12 @@ export function Footer() {
                 Built with ❤️ by
               </Text>
               <ChakraLink
-                onClick={() => openExternalLink(`https://github.com/${GITHUB_PROFILE_ID}`)}
+                href={`https://github.com/${GITHUB_PROFILE_ID}`}
+                target="_blank"
+                rel="noopener noreferrer"
                 fontWeight="600"
                 color="brand.600"
                 _hover={{ color: "brand.700", textDecoration: "underline" }}
-                cursor="pointer"
               >
                 {MY_NAME}
               </ChakraLink>
@@ -129,11 +129,12 @@ export function Footer() {
                 </ChakraLink>
               </RouterLink>
               <ChakraLink
-                onClick={() => openExternalLink(`https://github.com/${GITHUB_PROFILE_ID}`)}
+                href={`https://github.com/${GITHUB_PROFILE_ID}`}
+                target="_blank"
+                rel="noopener noreferrer"
                 color="gray.600"
                 _hover={{ color: "black" }}
                 aria-label="GitHub Repository"
-                cursor="pointer"
               >
                 <Icon w={5} h={5}>
                   <svg fill="currentColor" viewBox="0 0 24 24">

@@ -56,14 +56,32 @@ export default defineConfig({
     // Code splitting for optimal bundle size
     rollupOptions: {
       output: {
-        manualChunks: {
-          // Vendor chunks
-          'react-vendor': ['react', 'react-dom', 'react-router-dom'],
-          'chakra-vendor': ['@chakra-ui/react', '@emotion/react', '@emotion/styled'],
-          'dnd-vendor': ['@dnd-kit/core', '@dnd-kit/sortable', '@dnd-kit/utilities'],
-          // Heavy PDF libs - lazy loaded
-          'pdf-lib': ['pdf-lib'],
-          'pdfjs': ['pdfjs-dist'],
+        manualChunks(id) {
+          if (id.includes('node_modules')) {
+            if (id.includes('react') || id.includes('react-dom') || id.includes('react-router-dom')) {
+              return 'vendor-react';
+            }
+            if (id.includes('@chakra-ui') || id.includes('@emotion')) {
+              return 'vendor-chakra';
+            }
+            if (id.includes('framer-motion')) {
+              return 'vendor-motion';
+            }
+            if (id.includes('pdf-lib')) {
+              return 'lib-pdflib';
+            }
+            if (id.includes('pdfjs-dist')) {
+              return 'lib-pdfjs';
+            }
+            if (id.includes('@dnd-kit')) {
+              return 'lib-dnd';
+            }
+            return 'vendor-others';
+          }
+          if (id.includes('src/features/')) {
+             const feature = id.split('src/features/')[1].split('/')[0];
+             return `feature-${feature}`;
+          }
         },
       },
     },
