@@ -1,24 +1,20 @@
 export { Navbar } from './Navbar';
-export { DropZone } from './DropZone';
-export { FileCard } from './FileCard';
-export { FileList } from './FileList';
-export { MergeButton } from './MergeButton';
 export { Footer } from './Footer';
-
-// Compress components
-export { CompressDropZone } from './CompressDropZone';
-export { CompressFileCard } from './CompressFileCard';
-export { CompressFileList } from './CompressFileList';
-export { CompressOptionsPanel } from './CompressOptionsPanel';
-
-// Image to PDF components
-export { ImageDropZone } from './ImageDropZone';
-export { ImageCard } from './ImageCard';
-export { ImageFileList } from './ImageFileList';
-export { ConvertButton } from './ConvertButton';
-
-// Encrypt components
+export { DropZone } from './DropZone';
+export { FileList } from './FileList';
+export { FileCard } from './FileCard';
+export { MergeButton } from './MergeButton';
 export { EncryptDropZone } from './EncryptDropZone';
-export { EncryptFileCard } from './EncryptFileCard';
 export { EncryptFileList } from './EncryptFileList';
+export { EncryptFileCard } from './EncryptFileCard';
+export { CompressDropZone } from './CompressDropZone';
+export { CompressFileList } from './CompressFileList';
+export { CompressFileCard } from './CompressFileCard';
+export { CompressOptionsPanel } from './CompressOptionsPanel';
+export { ImageDropZone } from './ImageDropZone';
+export { ImageFileList } from './ImageFileList';
+export { ImageCard } from './ImageCard';
+export { ConvertButton } from './ConvertButton';
 export { PasswordInput } from './PasswordInput';
+export { MotionBox } from './ui/MotionBox';
+

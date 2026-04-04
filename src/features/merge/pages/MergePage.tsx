@@ -1,5 +1,6 @@
 import { Box, Heading, Text, VStack, Container } from "@chakra-ui/react";
-import { DropZone, FileList, MergeButton, MotionBox } from "../components";
+import { DropZone, FileList, MergeButton } from "../components";
+import { MotionBox } from "../../../components";
 
 export function MergePage() {
   return (

@@ -1,5 +1,6 @@
 import { Box, Heading, Text, VStack, Container } from '@chakra-ui/react';
-import { ImageDropZone, ImageFileList, ConvertButton, MotionBox } from '../components';
+import { ImageDropZone, ImageFileList, ConvertButton } from '../components';
+import { MotionBox } from '../../../components';
 
 export function ImageToPDFPage() {
     return (

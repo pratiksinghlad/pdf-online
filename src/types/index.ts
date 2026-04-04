@@ -92,3 +92,4 @@ export interface DragItem {
 }
 
 export * from './encrypt';
+export * from './unlock';

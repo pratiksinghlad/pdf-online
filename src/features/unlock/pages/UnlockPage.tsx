@@ -1,7 +1,8 @@
 import { Box, Heading, Text, VStack, Container } from "@chakra-ui/react";
-import { EncryptDropZone, EncryptFileList, MotionBox } from "../components";
+import { UnlockDropZone, UnlockFileList } from "../components";
+import { MotionBox } from "../../../components";
 
-export function EncryptPage() {
+export function UnlockPage() {
   return (
     <Box minH="100vh" bg="white">
       <Box
@@ -22,7 +23,7 @@ export function EncryptPage() {
                 color="gray.800"
                 lineHeight="1.2"
               >
-                Password Protect PDF Files
+                Unlock PDF Files
               </Heading>
               <Text
                 fontSize={{ base: "md", md: "lg" }}
@@ -31,7 +32,7 @@ export function EncryptPage() {
                 maxW="600px"
                 mx="auto"
               >
-                Secure your PDF documents with a password and strong encryption.
+                Remove password security from your PDF documents.
                 <Text as="span" color="red.600" fontWeight="600">
                   {" "}
                   100% free and private
@@ -41,7 +42,7 @@ export function EncryptPage() {
             </MotionBox>
 
             <Box w="100%" maxW="600px">
-              <EncryptDropZone />
+              <UnlockDropZone />
             </Box>
           </VStack>
         </Container>
@@ -49,7 +50,7 @@ export function EncryptPage() {
 
       <Container maxW="800px" px={{ base: 4, md: 6 }} py={{ base: 6, md: 10 }}>
         <VStack gap={{ base: 6, md: 10 }} align="stretch">
-          <EncryptFileList />
+          <UnlockFileList />
         </VStack>
       </Container>
     </Box>

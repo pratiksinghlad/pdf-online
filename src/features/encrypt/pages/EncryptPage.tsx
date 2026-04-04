@@ -1,5 +1,6 @@
 import { Box, Heading, Text, VStack, Container } from "@chakra-ui/react";
-import { EncryptDropZone, EncryptFileList, MotionBox } from "../components";
+import { EncryptDropZone, EncryptFileList } from "../components";
+import { MotionBox } from "../../../components";
 
 export function EncryptPage() {
   return (
