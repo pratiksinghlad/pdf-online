@@ -1,14 +1,12 @@
 import { Box, Heading, Text, VStack, Container, HStack, Flex, Icon } from '@chakra-ui/react';
 import { Link } from 'react-router-dom';
-import { motion } from 'framer-motion';
 import { useCallback } from 'react';
 import { useDropzone } from 'react-dropzone';
 import { CompressProvider, useCompress } from '../../../context/CompressContext';
 import { CompressDropZone } from '../components/CompressDropZone';
 import { CompressFileList } from '../components/CompressFileList';
 import { CompressOptionsPanel } from '../components/CompressOptionsPanel';
-
-const MotionBox = motion.create(Box);
+import { MotionBox } from '../../../components';
 
 function CompressPageContent() {
     const { files, addFiles } = useCompress();

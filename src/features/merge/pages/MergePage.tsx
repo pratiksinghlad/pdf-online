@@ -1,8 +1,6 @@
 import { Box, Heading, Text, VStack, Container } from "@chakra-ui/react";
-import { motion } from "framer-motion";
 import { DropZone, FileList, MergeButton } from "../components";
-
-const MotionBox = motion.create(Box);
+import { MotionBox } from "../../../components";
 
 export function MergePage() {
   return (

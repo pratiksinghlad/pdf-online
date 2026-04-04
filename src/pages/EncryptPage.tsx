@@ -1,8 +1,5 @@
 import { Box, Heading, Text, VStack, Container } from "@chakra-ui/react";
-import { motion } from "framer-motion";
-import { EncryptDropZone, EncryptFileList } from "../components";
-
-const MotionBox = motion.create(Box);
+import { EncryptDropZone, EncryptFileList, MotionBox } from "../components";
 
 export function EncryptPage() {
   return (

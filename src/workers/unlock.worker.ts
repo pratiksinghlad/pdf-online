@@ -1,12 +1,17 @@
 /// <reference lib="webworker" />
-// @ts-ignore
 import createModule from "@neslinesli93/qpdf-wasm";
 
+import qpdfWasmUrl from "@neslinesli93/qpdf-wasm/dist/qpdf.wasm?url";
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 let qpdfPromise: any = null;
 
 async function getQPDF() {
   if (!qpdfPromise) {
-    qpdfPromise = createModule();
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    qpdfPromise = (createModule as any)({
+      locateFile: () => qpdfWasmUrl,
+    });
   }
   return qpdfPromise;
 }
@@ -48,6 +53,7 @@ self.addEventListener("message", async (event: MessageEvent) => {
       try {
         qpdf.FS.unlink(inputPath);
         qpdf.FS.unlink(outputPath);
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
       } catch (e) {
         // Ignore cleanup errors
       }
@@ -66,7 +72,7 @@ self.addEventListener("message", async (event: MessageEvent) => {
     } 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     catch (error: any) {
-      let errorMessage = error.message || error.toString();
+      const errorMessage = error.message || error.toString();
       
       // If QPDF says it's not encrypted, we can still succeed by returning the original
       if (errorMessage.includes("not encrypted") || errorMessage.includes("already decrypted")) {

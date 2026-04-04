@@ -1,8 +1,6 @@
 import { Box, Heading, Text, VStack, Container } from "@chakra-ui/react";
-import { motion } from "framer-motion";
-import { UnlockDropZone, UnlockFileList } from "../components/index.ts";
-
-const MotionBox = motion.create(Box);
+import { UnlockDropZone, UnlockFileList } from "../components";
+import { MotionBox } from "../../../components";
 
 export function UnlockPage() {
   return (

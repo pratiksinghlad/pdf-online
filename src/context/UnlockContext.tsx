@@ -20,6 +20,7 @@ async function checkIfEncrypted(buffer: ArrayBuffer): Promise<boolean> {
     const pdf = await loadingTask.promise;
     pdf.destroy();
     return false;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (err: any) {
     if (err.name === "PasswordException") {
       return true;
@@ -181,6 +182,7 @@ export function UnlockProvider({ children }: { children: React.ReactNode }) {
         const buffer = await readFileAsArrayBuffer(fileInfo.file);
         
         // Structural unlock via QPDF Worker
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         const result = await new Promise<any>((resolve, reject) => {
           if (!workerRef.current) return reject("Worker not initialized");
           

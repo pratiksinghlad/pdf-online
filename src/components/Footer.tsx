@@ -49,7 +49,7 @@ export function Footer() {
             </HStack>
 
             <HStack gap={2}>
-              <Text fontSize="sm" color="gray.500">
+              <Text fontSize="sm" color="gray.700">
                 Built with ❤️ by
               </Text>
               <ChakraLink
@@ -107,11 +107,11 @@ export function Footer() {
               <RouterLink to="/about">
                 <ChakraLink
                   as="span"
-                  color="gray.600"
+                  color="gray.800"
                   fontSize="sm"
-                  fontWeight="500"
+                  fontWeight="600"
                   cursor="pointer"
-                  _hover={{ color: "brand.500" }}
+                  _hover={{ color: "brand.600" }}
                 >
                   About
                 </ChakraLink>
@@ -119,11 +119,11 @@ export function Footer() {
               <RouterLink to="/how-it-works">
                 <ChakraLink
                   as="span"
-                  color="gray.600"
+                  color="gray.800"
                   fontSize="sm"
-                  fontWeight="500"
+                  fontWeight="600"
                   cursor="pointer"
-                  _hover={{ color: "brand.500" }}
+                  _hover={{ color: "brand.600" }}
                 >
                   How It Works
                 </ChakraLink>
@@ -147,9 +147,9 @@ export function Footer() {
                 </Icon>
               </ChakraLink>
             </HStack>
-            <Text fontSize="xs" color="gray.400">
-              © {new Date().getFullYear()} PDF online. MIT License.
-            </Text>
+              <Text fontSize="sm" color="gray.700">
+                © {new Date().getFullYear()} PDF online. MIT License.
+              </Text>
           </VStack>
         </Flex>
       </Box>

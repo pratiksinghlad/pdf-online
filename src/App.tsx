@@ -45,7 +45,7 @@ function App() {
               <UnlockProvider>
                 <Box minH="100vh" display="flex" flexDirection="column">
                 <Navbar />
-                <Box flex="1">
+                <Box as="main" flex="1" pt={{ base: "80px", md: "100px" }}>
                   <Suspense fallback={<LoadingFallback />}>
                     <Routes>
                       <Route path="/" element={<MergePage />} />

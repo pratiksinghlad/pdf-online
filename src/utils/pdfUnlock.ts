@@ -138,7 +138,8 @@ export async function unlockPdf(
       }
 
       // Render the page
-      await page.render({ canvasContext: ctx, viewport }).promise;
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      await (page.render({ canvasContext: ctx, viewport, canvas } as any).promise);
 
       // Convert to image
       const imgData = canvas.toDataURL("image/jpeg", JPEG_QUALITY);

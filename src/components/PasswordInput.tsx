@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useId } from "react";
 import {
   Input,
   IconButton,
@@ -13,6 +13,7 @@ interface PasswordInputProps {
   value: string;
   onChange: (value: string) => void;
   placeholder?: string;
+  label?: string;
   showStrengthIndicator?: boolean;
 }
 
@@ -20,9 +21,12 @@ export function PasswordInput({
   value,
   onChange,
   placeholder = "Enter password",
+  label,
   showStrengthIndicator = false,
 }: PasswordInputProps) {
   const [show, setShow] = useState(false);
+  const reactId = useId();
+  const inputId = `password-input-${reactId}`;
 
   const getStrength = (pass: string) => {
     let score = 0;
@@ -40,6 +44,14 @@ export function PasswordInput({
 
   return (
     <VStack align="stretch" gap={1} w="100%">
+      {label && (
+        <label
+          htmlFor={inputId}
+          style={{ fontSize: "14px", fontWeight: "600", color: "#4A5568", marginBottom: "4px" }}
+        >
+          {label}
+        </label>
+      )}
       <Group
         w="100%"
         border="1px solid"
@@ -47,20 +59,22 @@ export function PasswordInput({
         borderRadius="xl"
         px={3}
         _hover={{ borderColor: "gray.300" }}
-        _focusWithin={{ borderColor: "red.500", ring: "1px", ringColor: "red.500" }}
+        _focusWithin={{ borderColor: "red.600", ring: "1px", ringColor: "red.600" }}
         transition="all 0.2s"
         bg="white"
         h="44px"
         alignItems="center"
         gap={1}
       >
-        <Lock size={18} color="#A0AEC0" style={{ flexShrink: 0 }} />
+        <Lock size={18} color="#718096" aria-hidden="true" style={{ flexShrink: 0 }} />
         <Input
+          id={inputId}
           type={show ? "text" : "password"}
           value={value}
           onChange={(e) => onChange(e.target.value)}
           placeholder={placeholder}
-          autoComplete="new-password"
+          aria-label={!label ? placeholder : undefined}
+          autoComplete="current-password"
           data-lpignore="true"
           spellCheck={false}
           px={2}
@@ -77,12 +91,12 @@ export function PasswordInput({
           variant="ghost"
           size="sm"
           onClick={() => setShow(!show)}
-          color="gray.400"
-          _hover={{ bg: "transparent", color: "red.500" }}
+          color="gray.500"
+          _hover={{ bg: "transparent", color: "red.600" }}
           _active={{ bg: "transparent" }}
           flexShrink={0}
         >
-          {show ? <EyeOff size={20} /> : <Eye size={20} />}
+          {show ? <EyeOff size={20} aria-hidden="true" /> : <Eye size={20} aria-hidden="true" />}
         </IconButton>
       </Group>
 
@@ -93,12 +107,15 @@ export function PasswordInput({
               <Progress.Range />
             </Progress.Track>
           </Progress.Root>
-          <Text fontSize="xs" color="gray.500" mt={1}>
-            {strength < 50
-              ? "Weak"
-              : strength < 75
-              ? "Moderate"
-              : "Strong"}
+          <Text fontSize="xs" color="gray.600" mt={1}>
+            Password Strength: 
+            <Text as="span" fontWeight="700" ml={1}>
+              {strength < 50
+                ? "Weak"
+                : strength < 75
+                ? "Moderate"
+                : "Strong"}
+            </Text>
           </Text>
         </VStack>
       )}

@@ -28,7 +28,7 @@ A **free, fast, and privacy-first** PDF online that runs entirely in your browse
 
 ### Prerequisites
 
-- Node.js 18+ 
+- Node.js 18+
 - npm or pnpm
 
 ### Installation
@@ -47,13 +47,13 @@ npm run dev
 
 ### Available Scripts
 
-| Script | Description |
-|--------|-------------|
-| `npm run dev` | Start development server at http://localhost:5173 |
-| `npm run build` | Build for production |
-| `npm run preview` | Preview production build |
-| `npm run lint` | Run ESLint |
-| `npm run format` | Format code with Prettier |
+| Script            | Description                                       |
+| ----------------- | ------------------------------------------------- |
+| `npm run dev`     | Start development server at http://localhost:3001 |
+| `npm run build`   | Build for production                              |
+| `npm run preview` | Preview production build                          |
+| `npm run lint`    | Run ESLint                                        |
+| `npm run format`  | Format code with Prettier                         |
 
 ## 📁 Project Structure
 
@@ -87,11 +87,11 @@ src/
 
 ### Key Files
 
-| File | Purpose |
-|------|---------|
-| `src/context/PDFContext.tsx` | Main state management, file handling, thumbnail generation, and orchestrates merge operations |
-| `src/workers/pdfWorker.ts` | Web Worker that performs heavy PDF operations (merging, page counting) off the main thread |
-| `src/components/FileList.tsx` | Drag-and-drop file reordering with @dnd-kit |
+| File                          | Purpose                                                                                       |
+| ----------------------------- | --------------------------------------------------------------------------------------------- |
+| `src/context/PDFContext.tsx`  | Main state management, file handling, thumbnail generation, and orchestrates merge operations |
+| `src/workers/pdfWorker.ts`    | Web Worker that performs heavy PDF operations (merging, page counting) off the main thread    |
+| `src/components/FileList.tsx` | Drag-and-drop file reordering with @dnd-kit                                                   |
 
 ## 🔧 Architecture
 
@@ -120,24 +120,24 @@ Main Thread                    Web Worker
 
 ## 🎨 Technology Stack
 
-| Technology | Purpose | License |
-|------------|---------|---------|
-| React + TypeScript | UI Framework | MIT |
-| Vite | Build tool | MIT |
-| Chakra UI | Component library | MIT |
-| pdf-lib | PDF manipulation | MIT |
-| pdfjs-dist | PDF rendering | Apache 2.0 |
-| @dnd-kit | Drag and drop | MIT |
-| react-dropzone | File drop handling | MIT |
-| framer-motion | Animations | MIT |
+| Technology         | Purpose            | License    |
+| ------------------ | ------------------ | ---------- |
+| React + TypeScript | UI Framework       | MIT        |
+| Vite               | Build tool         | MIT        |
+| Chakra UI          | Component library  | MIT        |
+| pdf-lib            | PDF manipulation   | MIT        |
+| pdfjs-dist         | PDF rendering      | Apache 2.0 |
+| @dnd-kit           | Drag and drop      | MIT        |
+| react-dropzone     | File drop handling | MIT        |
+| framer-motion      | Animations         | MIT        |
 
 ## ⚠️ Known Limitations
 
-| Limitation | Details |
-|------------|---------|
-| Large files | Files >50MB may be slow to process |
-| Encrypted PDFs | Password-protected PDFs cannot be merged |
-| Memory | Very large merges (100+ pages) may require more browser memory |
+| Limitation      | Details                                                                     |
+| --------------- | --------------------------------------------------------------------------- |
+| Large files     | Files >50MB may be slow to process                                          |
+| Encrypted PDFs  | Password-protected PDFs cannot be merged                                    |
+| Memory          | Very large merges (100+ pages) may require more browser memory              |
 | Browser support | Modern browsers recommended (Chrome 90+, Firefox 90+, Safari 14+, Edge 90+) |
 
 ## ♿ Accessibility
