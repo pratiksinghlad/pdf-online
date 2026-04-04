@@ -2,10 +2,7 @@ import { BrowserRouter, HashRouter, Routes, Route } from "react-router-dom";
 import { ChakraProvider, Box, Center, Spinner } from "@chakra-ui/react";
 import { Suspense, lazy } from "react";
 import { system } from "./theme";
-import { PDFProvider } from "./context/PDFContext";
-import { ImageToPDFProvider } from "./context/ImageToPDFContext";
-import { EncryptProvider } from "./context/EncryptContext";
-import { UnlockProvider } from "./context/UnlockContext";
+
 import { Navbar, Footer } from "./components";
 
 import { isTauri } from '@tauri-apps/api/core';
@@ -39,32 +36,24 @@ function App() {
   return (
     <ChakraProvider value={system}>
       <Router basename={basename}>
-        <PDFProvider>
-          <ImageToPDFProvider>
-            <EncryptProvider>
-              <UnlockProvider>
                 <Box minH="100vh" display="flex" flexDirection="column">
-                <Navbar />
-                <Box as="main" flex="1" pt={{ base: "80px", md: "100px" }}>
-                  <Suspense fallback={<LoadingFallback />}>
-                    <Routes>
-                      <Route path="/" element={<MergePage />} />
-                      <Route path="/merge" element={<MergePage />} />
-                      <Route path="/compress" element={<CompressPage />} />
-                      <Route path="/image-to-pdf" element={<ImageToPDFPage />} />
-                      <Route path="/encrypt" element={<EncryptPage />} />
-                      <Route path="/unlock-pdf" element={<UnlockPage />} />
-                      <Route path="/about" element={<AboutPage />} />
-                      <Route path="/how-it-works" element={<HowItWorksPage />} />
-                    </Routes>
-                  </Suspense>
+                  <Navbar />
+                  <Box as="main" flex="1" pt={{ base: "80px", md: "100px" }}>
+                    <Suspense fallback={<LoadingFallback />}>
+                      <Routes>
+                        <Route path="/" element={<MergePage />} />
+                        <Route path="/merge" element={<MergePage />} />
+                        <Route path="/compress" element={<CompressPage />} />
+                        <Route path="/image-to-pdf" element={<ImageToPDFPage />} />
+                        <Route path="/encrypt" element={<EncryptPage />} />
+                        <Route path="/unlock-pdf" element={<UnlockPage />} />
+                        <Route path="/about" element={<AboutPage />} />
+                        <Route path="/how-it-works" element={<HowItWorksPage />} />
+                      </Routes>
+                    </Suspense>
+                  </Box>
+                  <Footer />
                 </Box>
-                <Footer />
-              </Box>
-            </UnlockProvider>
-          </EncryptProvider>
-        </ImageToPDFProvider>
-        </PDFProvider>
       </Router>
     </ChakraProvider>
   );

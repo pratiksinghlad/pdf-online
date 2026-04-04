@@ -1,8 +1,8 @@
 import { Box, Heading, Text, VStack, Container } from '@chakra-ui/react';
 import { ImageDropZone, ImageFileList, ConvertButton } from '../components';
-import { MotionBox } from '../../../components';
-
-export function ImageToPDFPage() {
+import { MotionBox } from "../../../components";
+import { ImageToPDFProvider } from "../../../context/ImageToPDFContext";
+export function ImageToPDFPageContent() {
     return (
         <Box minH="100vh" bg="white">
             {/* Hero Section */}
@@ -180,5 +180,13 @@ export function ImageToPDFPage() {
                 </Container>
             </Box>
         </Box>
+    );
+}
+
+export function ImageToPDFPage() {
+    return (
+        <ImageToPDFProvider>
+            <ImageToPDFPageContent />
+        </ImageToPDFProvider>
     );
 }
