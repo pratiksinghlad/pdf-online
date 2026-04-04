@@ -45,13 +45,51 @@
     <!-- Theme Color -->
     <meta name="theme-color" content="#e53e3e" />
 
+    <!-- Structured Data (JSON-LD) for SEO -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebApplication",
+      "name": "PDF Online",
+      "url": "https://pdf-online.io",
+      "description": "Secure, 100% client-side PDF tools. Merge, Compress, Encrypt, and convert Images to PDF without uploading your files.",
+      "applicationCategory": "MultimediaApplication",
+      "operatingSystem": "Any",
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "USD"
+      },
+      "featureList": [
+        "Merge PDF files",
+        "Compress PDF files",
+        "Encrypt PDF with password",
+        "Convert Images to PDF"
+      ],
+      "author": {
+        "@type": "Organization",
+        "name": "PDF Online"
+      },
+      "browserRequirements": "Requires JavaScript and modern web browser",
+      "permissions": "Handles files locally in-browser"
+    }
+    </script>
+
     <!-- Preconnect to Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <script type="module" crossorigin src="/pdf-online/assets/index-Bb4W7ZRT.js"></script>
-    <link rel="modulepreload" crossorigin href="/pdf-online/assets/react-vendor-D_OcbTaI.js">
-    <link rel="modulepreload" crossorigin href="/pdf-online/assets/chakra-vendor-orNa5dSa.js">
-    <link rel="modulepreload" crossorigin href="/pdf-online/assets/dnd-vendor-B_7HRrYx.js">
+    <script type="module" crossorigin src="/pdf-online/assets/index-ENoLvBWy.js"></script>
+    <link rel="modulepreload" crossorigin href="/pdf-online/assets/vendor-others-CRJBhm3Q.js">
+    <link rel="modulepreload" crossorigin href="/pdf-online/assets/vendor-chakra-oaa7zYd4.js">
+    <link rel="modulepreload" crossorigin href="/pdf-online/assets/vendor-react-D7ilN9qZ.js">
+    <link rel="modulepreload" crossorigin href="/pdf-online/assets/lib-dnd-C9fcokFZ.js">
+    <link rel="modulepreload" crossorigin href="/pdf-online/assets/vendor-motion-BAXuaDsm.js">
+    <link rel="modulepreload" crossorigin href="/pdf-online/assets/feature-merge-CLwz4lwu.js">
+    <link rel="modulepreload" crossorigin href="/pdf-online/assets/feature-image-to-pdf-DYUtn0Xr.js">
+    <link rel="modulepreload" crossorigin href="/pdf-online/assets/feature-encrypt-BjYbcAty.js">
+    <link rel="modulepreload" crossorigin href="/pdf-online/assets/lib-pdfjs-Bl-Serqq.js">
+    <link rel="modulepreload" crossorigin href="/pdf-online/assets/feature-unlock-D3LK2zze.js">
+    <link rel="modulepreload" crossorigin href="/pdf-online/assets/feature-compress-CHaN6xpb.js">
     <link rel="stylesheet" crossorigin href="/pdf-online/assets/index-Bz8ghyuT.css">
   </head>
 
@@ -71,6 +109,6 @@
       >
         Loading PDF Online...
       </div>
-    </div>
+    </div>
   </body>
 </html>
