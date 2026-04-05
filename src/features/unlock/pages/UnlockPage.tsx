@@ -1,8 +1,8 @@
 import { Box, Heading, Text, VStack, Container } from "@chakra-ui/react";
 import { UnlockDropZone, UnlockFileList } from "../components";
 import { MotionBox } from "../../../components";
-
-export function UnlockPage() {
+import { UnlockProvider } from "../../../context/UnlockContext";
+export function UnlockPageContent() {
   return (
     <Box minH="100vh" bg="white">
       <Box
@@ -55,4 +55,12 @@ export function UnlockPage() {
       </Container>
     </Box>
   );
+}
+
+export function UnlockPage() {
+    return (
+        <UnlockProvider>
+            <UnlockPageContent />
+        </UnlockProvider>
+    );
 }

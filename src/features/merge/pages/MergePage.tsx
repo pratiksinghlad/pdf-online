@@ -1,8 +1,8 @@
 import { Box, Heading, Text, VStack, Container } from "@chakra-ui/react";
 import { DropZone, FileList, MergeButton } from "../components";
 import { MotionBox } from "../../../components";
-
-export function MergePage() {
+import { PDFProvider } from "../../../context/PDFContext";
+export function MergePageContent() {
   return (
     <Box minH="100vh" bg="white">
       {/* Hero Section */}
@@ -204,4 +204,12 @@ export function MergePage() {
       </Box>
     </Box>
   );
+}
+
+export function MergePage() {
+    return (
+        <PDFProvider>
+            <MergePageContent />
+        </PDFProvider>
+    );
 }

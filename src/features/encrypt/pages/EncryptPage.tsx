@@ -1,8 +1,8 @@
 import { Box, Heading, Text, VStack, Container } from "@chakra-ui/react";
 import { EncryptDropZone, EncryptFileList } from "../components";
 import { MotionBox } from "../../../components";
-
-export function EncryptPage() {
+import { EncryptProvider } from "../../../context/EncryptContext";
+export function EncryptPageContent() {
   return (
     <Box minH="100vh" bg="white">
       <Box
@@ -55,4 +55,12 @@ export function EncryptPage() {
       </Container>
     </Box>
   );
+}
+
+export function EncryptPage() {
+    return (
+        <EncryptProvider>
+            <EncryptPageContent />
+        </EncryptProvider>
+    );
 }
