@@ -3,6 +3,7 @@ import react from '@vitejs/plugin-react';
 import path from 'path';
 import checker from "vite-plugin-checker";
 import viteCompression from "vite-plugin-compression";
+import wasm from "vite-plugin-wasm";
 
 // https://vite.dev/config/
 export default defineConfig({
@@ -29,9 +30,10 @@ export default defineConfig({
       ext: ".gz",
       threshold: 1024,
     }),
+    wasm()
   ].filter(Boolean),
   server: {
-    port: 5173,
+    port: 3001,
     strictPort: true,
     host: process.env.TAURI_DEV_HOST || false,
     hmr: process.env.TAURI_DEV_HOST
@@ -47,7 +49,7 @@ export default defineConfig({
       '@': path.resolve(__dirname, './src'),
     },
   },
-  assetsInclude: ["**/*.jpg", "**/*.png", "**/*.svg", "**/*.gif", "**/*.webp", "**/*.wasm"],
+  assetsInclude: ["**/*.jpg", "**/*.png", "**/*.svg", "**/*.gif", "**/*.webp"],
   base: process.env.TAURI_ENV_PLATFORM ? './' : '/pdf-online/',
   
   clearScreen: false,
@@ -56,14 +58,33 @@ export default defineConfig({
     // Code splitting for optimal bundle size
     rollupOptions: {
       output: {
-        manualChunks: {
-          // Vendor chunks
-          'react-vendor': ['react', 'react-dom', 'react-router-dom'],
-          'chakra-vendor': ['@chakra-ui/react', '@emotion/react', '@emotion/styled'],
-          'dnd-vendor': ['@dnd-kit/core', '@dnd-kit/sortable', '@dnd-kit/utilities'],
-          // Heavy PDF libs - lazy loaded
-          'pdf-lib': ['pdf-lib'],
-          'pdfjs': ['pdfjs-dist'],
+        manualChunks(id) {
+          if (id.includes('node_modules')) {
+            if (
+              id.includes('react') || 
+              id.includes('react-dom') || 
+              id.includes('react-router-dom') ||
+              id.includes('@chakra-ui') || 
+              id.includes('@emotion') ||
+              id.includes('framer-motion')
+            ) {
+              return 'vendor-ui';
+            }
+            if (id.includes('pdf-lib')) {
+              return 'lib-pdflib';
+            }
+            if (id.includes('pdfjs-dist')) {
+              return 'lib-pdfjs';
+            }
+            if (id.includes('@dnd-kit')) {
+              return 'lib-dnd';
+            }
+            return 'vendor-others';
+          }
+          if (id.includes('src/features/')) {
+             const feature = id.split('src/features/')[1].split('/')[0];
+             return `feature-${feature}`;
+          }
         },
       },
     },
@@ -72,13 +93,14 @@ export default defineConfig({
     // Enable minification
     minify: 'esbuild',
     // Source maps for production debugging
-    sourcemap: false,
+    sourcemap: true,
     // Target modern browsers
     target: 'esnext',
   },
-  // Worker configuration
+// Worker configuration
   worker: {
     format: 'es',
+    plugins: () => [wasm()],
   },
   // Optimize dependencies
   optimizeDeps: {

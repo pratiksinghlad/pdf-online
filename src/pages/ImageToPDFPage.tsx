@@ -1,8 +1,5 @@
 import { Box, Heading, Text, VStack, Container } from '@chakra-ui/react';
-import { motion } from 'framer-motion';
-import { ImageDropZone, ImageFileList, ConvertButton } from '../components';
-
-const MotionBox = motion.create(Box);
+import { ImageDropZone, ImageFileList, ConvertButton, MotionBox } from '../components';
 
 export function ImageToPDFPage() {
     return (

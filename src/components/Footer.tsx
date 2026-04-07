@@ -9,7 +9,6 @@ import {
 } from "@chakra-ui/react";
 import { Link as RouterLink } from "react-router-dom";
 import { GITHUB_PROFILE_ID, MY_NAME } from "../utils/constants";
-import { openExternalLink } from "../utils";
 
 export function Footer() {
   return (
@@ -50,15 +49,16 @@ export function Footer() {
             </HStack>
 
             <HStack gap={2}>
-              <Text fontSize="sm" color="gray.500">
+              <Text fontSize="sm" color="gray.700">
                 Built with ❤️ by
               </Text>
               <ChakraLink
-                onClick={() => openExternalLink(`https://github.com/${GITHUB_PROFILE_ID}`)}
+                href={`https://github.com/${GITHUB_PROFILE_ID}`}
+                target="_blank"
+                rel="noopener noreferrer"
                 fontWeight="600"
                 color="brand.600"
                 _hover={{ color: "brand.700", textDecoration: "underline" }}
-                cursor="pointer"
               >
                 {MY_NAME}
               </ChakraLink>
@@ -107,11 +107,11 @@ export function Footer() {
               <RouterLink to="/about">
                 <ChakraLink
                   as="span"
-                  color="gray.600"
+                  color="gray.800"
                   fontSize="sm"
-                  fontWeight="500"
+                  fontWeight="600"
                   cursor="pointer"
-                  _hover={{ color: "brand.500" }}
+                  _hover={{ color: "brand.600" }}
                 >
                   About
                 </ChakraLink>
@@ -119,21 +119,22 @@ export function Footer() {
               <RouterLink to="/how-it-works">
                 <ChakraLink
                   as="span"
-                  color="gray.600"
+                  color="gray.800"
                   fontSize="sm"
-                  fontWeight="500"
+                  fontWeight="600"
                   cursor="pointer"
-                  _hover={{ color: "brand.500" }}
+                  _hover={{ color: "brand.600" }}
                 >
                   How It Works
                 </ChakraLink>
               </RouterLink>
               <ChakraLink
-                onClick={() => openExternalLink(`https://github.com/${GITHUB_PROFILE_ID}`)}
+                href={`https://github.com/${GITHUB_PROFILE_ID}`}
+                target="_blank"
+                rel="noopener noreferrer"
                 color="gray.600"
                 _hover={{ color: "black" }}
                 aria-label="GitHub Repository"
-                cursor="pointer"
               >
                 <Icon w={5} h={5}>
                   <svg fill="currentColor" viewBox="0 0 24 24">
@@ -146,9 +147,9 @@ export function Footer() {
                 </Icon>
               </ChakraLink>
             </HStack>
-            <Text fontSize="xs" color="gray.400">
-              © {new Date().getFullYear()} PDF online. MIT License.
-            </Text>
+              <Text fontSize="sm" color="gray.700">
+                © {new Date().getFullYear()} PDF online. MIT License.
+              </Text>
           </VStack>
         </Flex>
       </Box>
