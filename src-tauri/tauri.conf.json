@@ -1,8 +1,8 @@
 {
   "$schema": "../node_modules/@tauri-apps/cli/config.schema.json",
   "productName": "PDF Online",
-  "version": "0.1.0",
-  "identifier": "com.pdfonline",
+  "version": "1.0.0",
+  "identifier": "com.github.pratiksinghlad",
   "build": {
     "frontendDist": "../dist",
     "devUrl": "http://localhost:3001",
