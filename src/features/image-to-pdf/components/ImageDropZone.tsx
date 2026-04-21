@@ -10,6 +10,33 @@ import { useImageToPDF } from '../../../context/ImageToPDFContext';
 // the motion component's prop definitions.
 const MotionBox: any = (motion as any)(Box);
 
+/**
+ * Accepted MIME types for react-dropzone.
+ *
+ * react-dropzone uses the `accept` prop to filter in the OS file picker and
+ * to set `isDragAccept` / `isDragReject` visual feedback. We accept every
+ * image/* MIME plus the extensions that iOS/macOS devices report for
+ * HEIC/HEIF, which often arrive with an empty or non-standard MIME type.
+ */
+const ACCEPTED_TYPES = {
+    'image/*': [
+        '.jpg',
+        '.jpeg',
+        '.png',
+        '.gif',
+        '.webp',
+        '.bmp',
+        '.tiff',
+        '.tif',
+        '.avif',
+        '.svg',
+        '.ico',
+    ],
+    // HEIC/HEIF — iPhone / Apple formats
+    'image/heic': ['.heic'],
+    'image/heif': ['.heif'],
+};
+
 export function ImageDropZone() {
     const { addFiles, files } = useImageToPDF();
 
@@ -22,52 +49,41 @@ export function ImageDropZone() {
 
     const { getRootProps, getInputProps, isDragActive, isDragAccept, isDragReject } = useDropzone({
         onDrop,
-        accept: {
-            'image/jpeg': ['.jpg', '.jpeg'],
-            'image/png': ['.png'],
-            'image/gif': ['.gif'],
-            'image/webp': ['.webp'],
-            'image/bmp': ['.bmp'],
-        },
+        accept: ACCEPTED_TYPES,
         multiple: true,
     });
 
-    // Handle paste event
+    /** Handle images pasted from clipboard (e.g. screenshots). */
     const handlePaste = useCallback(
         (e: React.ClipboardEvent) => {
-            const items = e.clipboardData.items;
-            const files: File[] = [];
-
-            for (let i = 0; i < items.length; i++) {
-                const item = items[i];
+            const pastedFiles: File[] = [];
+            for (let i = 0; i < e.clipboardData.items.length; i++) {
+                const item = e.clipboardData.items[i];
                 if (item.kind === 'file' && item.type.startsWith('image/')) {
                     const file = item.getAsFile();
-                    if (file) {
-                        files.push(file);
-                    }
+                    if (file) pastedFiles.push(file);
                 }
             }
-
-            if (files.length > 0) {
-                addFiles(files);
-            }
+            if (pastedFiles.length > 0) addFiles(pastedFiles);
         },
         [addFiles]
     );
 
-    const getBorderColor = () => {
-        if (isDragReject) return 'red.400';
-        if (isDragAccept) return 'green.400';
-        if (isDragActive) return 'purple.400';
-        return 'gray.200';
-    };
+    const borderColor = isDragReject
+        ? 'red.400'
+        : isDragAccept
+          ? 'green.400'
+          : isDragActive
+            ? 'purple.400'
+            : 'gray.200';
 
-    const getBgColor = () => {
-        if (isDragReject) return 'red.50';
-        if (isDragAccept) return 'green.50';
-        if (isDragActive) return 'purple.50';
-        return 'gray.50';
-    };
+    const bgColor = isDragReject
+        ? 'red.50'
+        : isDragAccept
+          ? 'green.50'
+          : isDragActive
+            ? 'purple.50'
+            : 'gray.50';
 
     const hasFiles = files.length > 0;
 
@@ -80,16 +96,13 @@ export function ImageDropZone() {
             aria-label="Drop image files here or click to select"
             cursor="pointer"
             border="2px dashed"
-            borderColor={getBorderColor()}
+            borderColor={borderColor}
             borderRadius="xl"
-            bg={getBgColor()}
+            bg={bgColor}
             p={{ base: 6, md: hasFiles ? 6 : 12 }}
             textAlign="center"
             style={{ transition: 'all 0.2s' }}
-            _hover={{
-                borderColor: 'purple.400',
-                bg: 'purple.50',
-            }}
+            _hover={{ borderColor: 'purple.400', bg: 'purple.50' }}
             _focus={{
                 outline: '2px solid',
                 outlineColor: 'purple.500',
@@ -103,15 +116,10 @@ export function ImageDropZone() {
             <input {...getInputProps()} aria-label="Upload image files to convert to PDF" />
 
             <VStack gap={3}>
-                {/* Upload Icon */}
+                {/* Upload icon */}
                 <MotionBox
-                    animate={{
-                        y: isDragActive ? [-5, 5, -5] : 0,
-                    }}
-                    transition={{
-                        repeat: isDragActive ? Infinity : 0,
-                        duration: 1,
-                    }}
+                    animate={{ y: isDragActive ? [-5, 5, -5] : 0 }}
+                    transition={{ repeat: isDragActive ? Infinity : 0, duration: 1 }}
                 >
                     <Icon
                         w={{ base: 10, md: hasFiles ? 8 : 16 }}
@@ -138,18 +146,18 @@ export function ImageDropZone() {
                                 ? 'Only image files are accepted'
                                 : 'Drop your images here'
                             : hasFiles
-                                ? 'Drop more images or click to add'
-                                : 'Drag & drop images here'}
+                              ? 'Drop more images or click to add'
+                              : 'Drag & drop images here'}
                     </Text>
 
                     {!hasFiles && (
                         <Text fontSize="sm" color="gray.500">
-                            JPG, PNG, GIF, WebP, BMP • paste from clipboard
+                            JPG, PNG, WebP, HEIC, TIFF, AVIF, BMP, SVG • paste from clipboard
                         </Text>
                     )}
                 </VStack>
 
-                {/* Upload Button */}
+                {/* CTA button */}
                 <Box
                     as="span"
                     bg="linear-gradient(135deg, #9f7aea 0%, #805ad5 100%)"
@@ -161,10 +169,7 @@ export function ImageDropZone() {
                     fontSize={{ base: 'sm', md: hasFiles ? 'sm' : 'md' }}
                     shadow="lg"
                     style={{ transition: 'all 0.2s' }}
-                    _hover={{
-                        transform: 'translateY(-2px)',
-                        shadow: 'xl',
-                    }}
+                    _hover={{ transform: 'translateY(-2px)', shadow: 'xl' }}
                 >
                     {hasFiles ? '+ Add More Images' : 'Select Images'}
                 </Box>

@@ -129,6 +129,17 @@ export function Footer() {
                 </ChakraLink>
               </RouterLink>
               <ChakraLink
+                href="https://pratiksinghlad.github.io/json-to-anything/"
+                target="_blank"
+                rel="noopener noreferrer"
+                color="gray.800"
+                fontSize="sm"
+                fontWeight="600"
+                _hover={{ color: "brand.600" }}
+              >
+                JSON Tools ↗
+              </ChakraLink>
+              <ChakraLink
                 href={`https://github.com/${GITHUB_PROFILE_ID}`}
                 target="_blank"
                 rel="noopener noreferrer"
