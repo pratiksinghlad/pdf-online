@@ -28,8 +28,14 @@
     "targets": ["nsis"],
     "publisher": "Pratik Singh Lad",
     "windows": {
+      "webviewInstallMode": {
+        "type": "offlineInstaller",
+        "silent": true
+      },
       "nsis": {
-        "installerIcon": "icons/icon.ico"
+        "installMode": "currentUser",
+        "installerIcon": "icons/icon.ico",
+        "compression": "lzma"
       }
     },
     "icon": [
