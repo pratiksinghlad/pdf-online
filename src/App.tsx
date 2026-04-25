@@ -13,6 +13,7 @@ const CompressPage = lazy(() => import("./features/compress").then(m => ({ defau
 const ImageToPDFPage = lazy(() => import("./features/image-to-pdf").then(m => ({ default: m.ImageToPDFPage })));
 const EncryptPage = lazy(() => import("./features/encrypt").then(m => ({ default: m.EncryptPage })));
 const UnlockPage = lazy(() => import("./features/unlock").then(m => ({ default: m.UnlockPage })));
+const SplitPDFPage = lazy(() => import("./features/split").then(m => ({ default: m.SplitPDFPage })));
 
 // Lazy load static pages
 const AboutPage = lazy(() => import("./pages/AboutPage").then(m => ({ default: m.AboutPage })));
@@ -47,6 +48,7 @@ function App() {
                         <Route path="/image-to-pdf" element={<ImageToPDFPage />} />
                         <Route path="/encrypt" element={<EncryptPage />} />
                         <Route path="/unlock-pdf" element={<UnlockPage />} />
+                        <Route path="/split-pdf" element={<SplitPDFPage />} />
                         <Route path="/about" element={<AboutPage />} />
                         <Route path="/how-it-works" element={<HowItWorksPage />} />
                       </Routes>

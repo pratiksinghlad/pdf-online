@@ -16,5 +16,6 @@ export { ImageFileList } from './ImageFileList';
 export { ImageCard } from './ImageCard';
 export { ConvertButton } from './ConvertButton';
 export { PasswordInput } from './PasswordInput';
+export { NumberInput, LabeledNumberInput } from './NumberInput';
 export { MotionBox } from './ui/MotionBox';
 

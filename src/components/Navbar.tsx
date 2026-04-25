@@ -22,6 +22,7 @@ import {
   Image as ImageIcon, 
   Lock, 
   Unlock, 
+  Scissors,
   Info, 
   HelpCircle,
   ExternalLink,
@@ -70,6 +71,13 @@ const otherTools = [
     path: '/unlock-pdf', 
     icon: Unlock,
     color: '#ed64a6' 
+  },
+  {
+    label: 'Split PDF',
+    description: 'Extract page ranges into separate files',
+    path: '/split-pdf',
+    icon: Scissors,
+    color: '#dd6b20',
   },
 ];
 
