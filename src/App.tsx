@@ -31,6 +31,9 @@ const SplitPDFPage = lazy(() =>
 const OrganizePage = lazy(() =>
   import("./features/organize").then((m) => ({ default: m.OrganizePage })),
 );
+const PdfToImagePage = lazy(() =>
+  import("./features/pdf-to-image").then((m) => ({ default: m.PdfToImagePage })),
+);
 
 // Lazy load static pages
 const AboutPage = lazy(() =>
@@ -71,6 +74,7 @@ function App() {
                 <Route path="/unlock-pdf" element={<UnlockPage />} />
                 <Route path="/split-pdf" element={<SplitPDFPage />} />
                 <Route path="/organize" element={<OrganizePage />} />
+                <Route path="/pdf-to-image" element={<PdfToImagePage />} />
                 <Route path="/about" element={<AboutPage />} />
                 <Route path="/how-it-works" element={<HowItWorksPage />} />
               </Routes>

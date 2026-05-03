@@ -24,6 +24,7 @@ import {
   Unlock,
   Scissors,
   RotateCw,
+  FileImage,
   Info,
   HelpCircle,
   ExternalLink,
@@ -86,6 +87,13 @@ const otherTools = [
     path: "/organize",
     icon: RotateCw,
     color: "#805ad5",
+  },
+  {
+    label: "PDF to Image",
+    description: "Convert PDF pages to JPG or PNG",
+    path: "/pdf-to-image",
+    icon: FileImage,
+    color: "#dd6b20",
   },
 ];
 
