@@ -1,39 +1,33 @@
----
-name: react-chakra-solid-rules
-description: Strict rules for React + TypeScript + Chakra UI development following SOLID, DRY, and existing linting configs.
----
+# Coding Standards: React, TypeScript, & Chakra UI
 
-# Frontend Excellence: React, TypeScript, & Chakra UI
+## ⚛️ React & Frontend
+- **Framework**: React 19+ with Vite.
+- **Component Style**: Functional components with Hooks. No class components.
+- **State Management**: 
+  - Use `useState` for local state.
+  - Use `Context API` only for global, low-frequency updates (e.g., Auth, Theme).
+  - Prefer server state management (e.g., TanStack Query) for data fetching if needed.
+- **Components**: Group by feature (`src/features/feature-name/components/`). One component per file.
 
-## 🎯 High-Level Principles
-- **Reliability**: Code MUST build and run without errors. Run `npm run build` or `tsc` to verify before finishing.
-- **SOLID & DRY**: Apply these principles strictly. Favor composition over inheritance and extract reusable logic into hooks.
-- **Simplicity**: Prefer "boring," readable code over clever, complex solutions.
+## 🔷 TypeScript
+- **Strictness**: Enable and follow strict mode. 
+- **No `any`**: Avoid `any` at all costs. Use `@ts-expect-error` or `eslint-disable-line` ONLY when absolutely necessary and documented.
+- **Types vs Interfaces**: Use `type` for component props and internal state; `interface` for public APIs or objects that benefit from declaration merging.
+- **Safety**: Use exhaustive switches and type guards to ensure runtime safety.
 
-## 🛠️ Tech Stack & Standards
-### 1. React & TypeScript
-- Use **Functional Components** and **Hooks** exclusively.
-- **Strict Typing**: No `any`. Use interfaces for props and centralize shared types in `types/`.
-- **Component Structure**: Export a single component per file.
+## 🎨 UI & Styling (Chakra UI 3.x)
+- **Library**: Chakra UI 3.x.
+- **Design System**: Use theme tokens (`colors.brand.500`, `spacing.4`) instead of hardcoded hex values or pixels.
+- **Responsive**: Use Chakra's responsive object/array syntax (e.g., `px={{ base: 4, md: 8 }}`).
+- **Accessibility**: Use semantic HTML elements (`Box as="main"`, etc.) and ensure proper ARIA attributes.
+- **Performance**: Use `framer-motion` for animations sparingly to maintain high FPS.
 
-### 2. Chakra UI
-- Use **Chakra UI components** for all layout and UI needs.
-- **Style Props**: Prefer Chakra's style props (e.g., `px={4}`, `bg="blue.500"`) over external CSS or inline styles.
-- **Theming**: Use the project's `theme.ts` tokens for colors, spacing, and typography to ensure consistency.
+## 🛠️ PDF Processing
+- **Private & Local**: All PDF processing must happen client-side (using `pdf-lib`, `pdfjs-dist`, `qpdf-wasm`).
+- **Web Workers**: Offload heavy computations to Web Workers to keep the UI responsive.
+- **Memory**: Use transferable objects (ArrayBuffers) when passing data between threads.
 
-### 3. Linting & Formatting (CRITICAL)
-- **Automatic Compliance**: You MUST read and follow the project's `eslint.config.js` and `.prettierrc` (or similar config files).
-- **No Overrides**: Do not add `eslint-disable` comments unless explicitly requested.
-- If a change causes a linting error, you must fix the code, not the rule.
-
-## 🏗️ Architecture
-- **Feature-Driven**: Group files by feature (e.g., `features/auth/components/`) rather than type.
-- **Data Fetching**: Keep logic out of components; use custom hooks or libraries like TanStack Query.
-- **State Management**: Use local state (`useState`) by default; escalate to Context or Zustand only when necessary.
-
-## ✅ Verification Checklist
-Before submitting changes, verify:
-1. No TypeScript errors in the modified files.
-2. Code matches the existing Prettier/ESLint formatting.
-3. No code duplication (DRY principle).
-4. The application starts and the modified feature works as expected.
+## ✅ Verification
+- **Build**: Always run `npm run build` after changes.
+- **Lint**: Run `npm run lint` and fix all warnings/errors.
+- **Testing**: Ensure `npm run test` passes if unit tests exist.
