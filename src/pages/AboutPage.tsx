@@ -40,6 +40,21 @@ const tools = [
     description:
       "Remove password protection when you know the correct password.",
   },
+  {
+    title: "Split PDF",
+    description:
+      "Extract page ranges from your PDF into separate files or combine them into one.",
+  },
+  {
+    title: "Organize PDF",
+    description:
+      "Reorder, rotate, and delete pages of your PDF document in real-time.",
+  },
+  {
+    title: "PDF to Image",
+    description:
+      "Convert PDF pages to high-quality JPG or PNG images directly on your device.",
+  },
 ];
 
 const highlights = [
