@@ -12,6 +12,7 @@
     "build:cf": "npm run build",
     "preview": "vite preview",
     "test": "vitest",
+    "test:ui": "playwright test",
     "postbuild": "node scripts/copy-404.js",
     "deploy": "npm run build && node scripts/copy-404.js && gh-pages -d dist",
     "lint": "eslint . --max-warnings=0 --fix",
@@ -66,6 +67,7 @@
     "vite-plugin-checker": "^0.12.0",
     "vite-plugin-compression": "^0.5.1",
     "vite-plugin-wasm": "^3.4.1",
-    "wait-on": "^8.0.5"
+    "wait-on": "^8.0.5",
+    "@playwright/test": "^1.49.0"
   }
 }

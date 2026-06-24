@@ -23,5 +23,6 @@ Follow these instructions strictly for all code generation and suggestions.
 ## 📚 Library Selection
 - Only suggest libraries that are Free, Open Source, Popular, Secure, and Enterprise-ready.
 
-## ✅ Build Verification
-- After generating code, remind the user to run `npm run build` to verify correctness.
+## ✅ Build & UI Test Verification
+- After making any changes or generating code, you MUST run the Playwright UI test suite using `npm run test:ui` and ensure that all tests pass.
+- If you introduce new features, pages, or routing paths, add corresponding test cases to `tests/navigation.spec.ts`.

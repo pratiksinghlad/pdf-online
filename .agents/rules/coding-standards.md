@@ -30,4 +30,4 @@
 ## ✅ Verification
 - **Build**: Always run `npm run build` after changes.
 - **Lint**: Run `npm run lint` and fix all warnings/errors.
-- **Testing**: Ensure `npm run test` passes if unit tests exist.
+- **Testing**: You **MUST** run the Playwright UI test suite using `npm run test:ui` after making any edits to the codebase, and all tests must be successful. Ensure `npm run test` passes as well if unit tests exist.

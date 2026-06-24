@@ -39,3 +39,7 @@ out
 *.njsproj
 *.sln
 *.sw?
+
+#testing
+test-results
+playwright-report

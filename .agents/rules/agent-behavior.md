@@ -28,5 +28,5 @@ When choosing or suggesting a library, it MUST meet these criteria:
 ## 🚀 Execution Workflow
 1. **Plan**: Analyze requirements and outline the solution using first principles.
 2. **Implement**: Write code following the project's coding standards.
-3. **Verify**: Run `npm run build` or `tsc` to confirm success.
+3. **Verify**: Run the Playwright UI tests using `npm run test:ui` and run `npm run build` or `tsc` to confirm success. All tests must pass before completing a task.
 4. **Report**: Summarize changes objectively without fluff.
