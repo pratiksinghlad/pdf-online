@@ -1,103 +1,123 @@
-import { 
-  Box, 
-  Flex, 
-  Text, 
-  Button, 
-  IconButton, 
-  HStack, 
+import {
+  Box,
+  Flex,
+  Text,
+  Button,
+  IconButton,
+  HStack,
   VStack,
-  useDisclosure, 
+  useDisclosure,
   Container,
   Portal,
-  Center
-} from '@chakra-ui/react';
-import { Link, useLocation } from 'react-router-dom';
-import { AnimatePresence } from 'framer-motion';
-import { 
-  Menu as MenuIcon, 
-  X, 
-  ChevronDown, 
-  Layers, 
-  Minimize2, 
-  Image as ImageIcon, 
-  Lock, 
-  Unlock, 
+  Center,
+} from "@chakra-ui/react";
+import { Link, useLocation } from "react-router-dom";
+import { AnimatePresence } from "framer-motion";
+import {
+  Menu as MenuIcon,
+  X,
+  ChevronDown,
+  Layers,
+  Minimize2,
+  Image as ImageIcon,
+  Lock,
+  Unlock,
   Scissors,
-  Info, 
+  RotateCw,
+  FileImage,
+  Info,
   HelpCircle,
   ExternalLink,
   ChevronRight,
   Sparkles,
-  Grid
-} from 'lucide-react';
-import React from 'react';
+  Grid,
+} from "lucide-react";
+import React from "react";
 
-import { MotionBox } from './ui/MotionBox';
+import { MotionBox } from "./ui/MotionBox";
 
 // Primary Tools - Visible directly on desktop
 const mainTools = [
-  { 
-    label: 'Merge PDF', 
-    path: '/merge', 
+  {
+    label: "Merge PDF",
+    path: "/merge",
     icon: Layers,
-    color: '#e53e3e' 
+    color: "#e53e3e",
   },
-  { 
-    label: 'Image to PDF', 
-    path: '/image-to-pdf', 
+  {
+    label: "Image to PDF",
+    path: "/image-to-pdf",
     icon: ImageIcon,
-    color: '#38a169' 
+    color: "#38a169",
   },
-  { 
-    label: 'Compress PDF', 
-    path: '/compress', 
+  {
+    label: "Compress PDF",
+    path: "/compress",
     icon: Minimize2,
-    color: '#3182ce' 
+    color: "#3182ce",
   },
 ];
 
 // Secondary Tools - Grouped under "More Tools" dropdown
 const otherTools = [
-  { 
-    label: 'Protect PDF', 
-    description: 'Secure files with strong encryption',
-    path: '/encrypt', 
+  {
+    label: "Protect PDF",
+    description: "Secure files with strong encryption",
+    path: "/encrypt",
     icon: Lock,
-    color: '#d69e2e' 
-  },
-  { 
-    label: 'Unlock PDF', 
-    description: 'Remove password and restrictions',
-    path: '/unlock-pdf', 
-    icon: Unlock,
-    color: '#ed64a6' 
+    color: "#d69e2e",
   },
   {
-    label: 'Split PDF',
-    description: 'Extract page ranges into separate files',
-    path: '/split-pdf',
+    label: "Unlock PDF",
+    description: "Remove password and restrictions",
+    path: "/unlock-pdf",
+    icon: Unlock,
+    color: "#ed64a6",
+  },
+  {
+    label: "Split PDF",
+    description: "Extract page ranges into separate files",
+    path: "/split-pdf",
     icon: Scissors,
-    color: '#dd6b20',
+    color: "#dd6b20",
+  },
+  {
+    label: "Organize PDF",
+    description: "Reorder, rotate, and delete pages",
+    path: "/organize",
+    icon: RotateCw,
+    color: "#805ad5",
+  },
+  {
+    label: "PDF to Image",
+    description: "Convert PDF pages to JPG or PNG",
+    path: "/pdf-to-image",
+    icon: FileImage,
+    color: "#dd6b20",
   },
 ];
 
 // Static page links
 const resourcesLinks = [
-  { label: 'About', path: '/about', icon: Info },
-  { label: 'How It Works', path: '/how-it-works', icon: HelpCircle },
+  { label: "About", path: "/about", icon: Info },
+  { label: "How It Works", path: "/how-it-works", icon: HelpCircle },
 ];
 
 export function Navbar() {
   const location = useLocation();
   const { open: isMobileOpen, onToggle: toggleMobile } = useDisclosure();
-  const { open: isMoreOpen, onOpen: onMoreOpen, onClose: onMoreClose } = useDisclosure();
-  
+  const {
+    open: isMoreOpen,
+    onOpen: onMoreOpen,
+    onClose: onMoreClose,
+  } = useDisclosure();
+
   const [isSticky, setIsSticky] = React.useState(false);
-  
+
   React.useEffect(() => {
     const handleScroll = () => setIsSticky(window.scrollY > 20);
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
   const isActive = (path: string) => location.pathname === path;
@@ -135,17 +155,40 @@ export function Navbar() {
                 justifyContent="center"
                 shadow="0 6px 15px rgba(216, 43, 43, 0.3)"
               >
-                <Text color="white" fontWeight="900" fontSize="22px">P</Text>
+                <Text color="white" fontWeight="900" fontSize="22px">
+                  P
+                </Text>
               </MotionBox>
-              <VStack align="start" gap={0} display={{ base: 'none', sm: 'flex' }}>
-                <Text fontSize="20px" fontWeight="900" color="gray.800" lineHeight="1" letterSpacing="-0.8px">PDF</Text>
-                <Text fontSize="14px" fontWeight="700" color="brand.500" lineHeight="1" letterSpacing="0.8px" textTransform="uppercase">online</Text>
+              <VStack
+                align="start"
+                gap={0}
+                display={{ base: "none", sm: "flex" }}
+              >
+                <Text
+                  fontSize="20px"
+                  fontWeight="900"
+                  color="gray.800"
+                  lineHeight="1"
+                  letterSpacing="-0.8px"
+                >
+                  PDF
+                </Text>
+                <Text
+                  fontSize="14px"
+                  fontWeight="700"
+                  color="brand.500"
+                  lineHeight="1"
+                  letterSpacing="0.8px"
+                  textTransform="uppercase"
+                >
+                  online
+                </Text>
               </VStack>
             </HStack>
           </Link>
 
           {/* Desktop Navigation */}
-          <HStack gap={1} display={{ base: 'none', lg: 'flex' }}>
+          <HStack gap={1} display={{ base: "none", lg: "flex" }}>
             {/* Main Tools (Direct Access) */}
             {mainTools.map((tool) => (
               <Link key={tool.path} to={tool.path}>
@@ -154,12 +197,16 @@ export function Navbar() {
                   h="44px"
                   px={5}
                   borderRadius="xl"
-                  color={isActive(tool.path) ? 'brand.600' : 'gray.800'}
-                  bg={isActive(tool.path) ? 'brand.50' : 'transparent'}
-                  fontWeight={isActive(tool.path) ? '800' : '700'}
+                  color={isActive(tool.path) ? "brand.600" : "gray.800"}
+                  bg={isActive(tool.path) ? "brand.50" : "transparent"}
+                  fontWeight={isActive(tool.path) ? "800" : "700"}
                   fontSize="15px"
-                  _hover={{ bg: 'brand.50', color: 'brand.600', transform: 'translateY(-1px)' }}
-                  _active={{ transform: 'translateY(0)' }}
+                  _hover={{
+                    bg: "brand.50",
+                    color: "brand.600",
+                    transform: "translateY(-1px)",
+                  }}
+                  _active={{ transform: "translateY(0)" }}
                   gap={2.5}
                 >
                   {/* Colorful Icon */}
@@ -170,7 +217,15 @@ export function Navbar() {
             ))}
 
             {/* "More Tools" Dropdown */}
-            <Box position="relative" onMouseEnter={onMoreOpen} onMouseLeave={onMoreClose} h="60px" display="flex" alignItems="center" px={1}>
+            <Box
+              position="relative"
+              onMouseEnter={onMoreOpen}
+              onMouseLeave={onMoreClose}
+              h="60px"
+              display="flex"
+              alignItems="center"
+              px={1}
+            >
               <Button
                 variant="ghost"
                 h="44px"
@@ -179,13 +234,17 @@ export function Navbar() {
                 fontWeight="800"
                 fontSize="15px"
                 borderRadius="xl"
-                bg={isMoreOpen ? 'gray.100' : 'transparent'}
-                _hover={{ bg: 'gray.100', color: 'gray.900' }}
+                bg={isMoreOpen ? "gray.100" : "transparent"}
+                _hover={{ bg: "gray.100", color: "gray.900" }}
                 gap={2.5}
               >
                 <Grid size={20} color="#718096" />
                 More Tools
-                <Box as="span" transition="transform 0.2s" transform={isMoreOpen ? 'rotate(180deg)' : 'none'}>
+                <Box
+                  as="span"
+                  transition="transform 0.2s"
+                  transform={isMoreOpen ? "rotate(180deg)" : "none"}
+                >
                   <ChevronDown size={16} />
                 </Box>
               </Button>
@@ -201,7 +260,7 @@ export function Navbar() {
                       position="fixed"
                       top="70px"
                       left="50%"
-                      marginLeft="-200px" 
+                      marginLeft="-200px"
                       zIndex={1100}
                       bg="white"
                       w="400px"
@@ -214,30 +273,77 @@ export function Navbar() {
                       borderColor="gray.100"
                     >
                       <VStack align="stretch" gap={1}>
-                        <Text px={4} py={2} fontWeight="800" color="gray.400" fontSize="xs" textTransform="uppercase" letterSpacing="1px">Additional PDF Features</Text>
+                        <Text
+                          px={4}
+                          py={2}
+                          fontWeight="800"
+                          color="gray.400"
+                          fontSize="xs"
+                          textTransform="uppercase"
+                          letterSpacing="1px"
+                        >
+                          Additional PDF Features
+                        </Text>
                         {otherTools.map((tool) => (
-                          <Link key={tool.path} to={tool.path} onClick={onMoreClose}>
+                          <Link
+                            key={tool.path}
+                            to={tool.path}
+                            onClick={onMoreClose}
+                          >
                             <HStack
                               p={4}
                               borderRadius="18px"
-                              _hover={{ bg: 'gray.50', transform: 'translateX(4px)' }}
+                              _hover={{
+                                bg: "gray.50",
+                                transform: "translateX(4px)",
+                              }}
                               transition="all 0.2s"
                               cursor="pointer"
                             >
-                              <Center w="44px" h="44px" bg={`${tool.color}10`} color={tool.color} borderRadius="14px">
+                              <Center
+                                w="44px"
+                                h="44px"
+                                bg={`${tool.color}10`}
+                                color={tool.color}
+                                borderRadius="14px"
+                              >
                                 <tool.icon size={22} />
                               </Center>
                               <VStack align="start" gap={0}>
-                                <Text fontWeight="800" color="gray.800" fontSize="15px">{tool.label}</Text>
-                                <Text fontSize="12px" color="gray.500" fontWeight="500">{tool.description}</Text>
+                                <Text
+                                  fontWeight="800"
+                                  color="gray.800"
+                                  fontSize="15px"
+                                >
+                                  {tool.label}
+                                </Text>
+                                <Text
+                                  fontSize="12px"
+                                  color="gray.500"
+                                  fontWeight="500"
+                                >
+                                  {tool.description}
+                                </Text>
                               </VStack>
                             </HStack>
                           </Link>
                         ))}
-                        <Box p={4} borderRadius="18px" bg="brand.50" border="1px dashed" borderColor="brand.200">
+                        <Box
+                          p={4}
+                          borderRadius="18px"
+                          bg="brand.50"
+                          border="1px dashed"
+                          borderColor="brand.200"
+                        >
                           <HStack gap={3}>
                             <Sparkles size={18} color="#e53e3e" />
-                            <Text fontSize="13px" fontWeight="700" color="brand.700">More tools joining soon!</Text>
+                            <Text
+                              fontSize="13px"
+                              fontWeight="700"
+                              color="brand.700"
+                            >
+                              More tools coming soon!
+                            </Text>
                           </HStack>
                         </Box>
                       </VStack>
@@ -258,11 +364,11 @@ export function Navbar() {
                   h="44px"
                   px={5}
                   borderRadius="xl"
-                  color={isActive(link.path) ? 'gray.900' : 'gray.800'}
-                  fontWeight={isActive(link.path) ? '800' : '700'}
+                  color={isActive(link.path) ? "gray.900" : "gray.800"}
+                  fontWeight={isActive(link.path) ? "800" : "700"}
                   fontSize="15px"
-                  _hover={{ bg: 'gray.50', color: 'gray.900' }}
-                  aria-current={isActive(link.path) ? 'page' : undefined}
+                  _hover={{ bg: "gray.50", color: "gray.900" }}
+                  aria-current={isActive(link.path) ? "page" : undefined}
                 >
                   {link.label}
                 </Button>
@@ -274,9 +380,11 @@ export function Navbar() {
           <HStack gap={3}>
             <Box
               as="a"
-              // eslint-disable-next-line @typescript-eslint/no-explicit-any
-              {...({ href: "https://github.com/pratiksinghlad/pdf-online", target: "_blank" } as any)}
-              display={{ base: 'none', md: 'flex' }}
+              {...({
+                href: "https://github.com/pratiksinghlad/pdf-online",
+                target: "_blank",
+              } as any)} // eslint-disable-line @typescript-eslint/no-explicit-any
+              display={{ base: "none", md: "flex" }}
               alignItems="center"
               justifyContent="center"
               h="44px"
@@ -287,23 +395,27 @@ export function Navbar() {
               fontWeight="700"
               fontSize="14px"
               transition="all 0.2s"
-              _hover={{ transform: 'translateY(-2px)', shadow: 'lg', textDecoration: 'none' }}
+              _hover={{
+                transform: "translateY(-2px)",
+                shadow: "lg",
+                textDecoration: "none",
+              }}
               textDecoration="none"
               gap={2}
             >
               <ExternalLink size={16} />
               GitHub
             </Box>
-            
+
             {/* Mobile Toggle */}
             <IconButton
-              display={{ base: 'flex', lg: 'none' }}
+              display={{ base: "flex", lg: "none" }}
               onClick={toggleMobile}
               variant="ghost"
               aria-label="Toggle menu"
               size="lg"
               borderRadius="xl"
-              _hover={{ bg: 'brand.50', color: 'brand.600' }}
+              _hover={{ bg: "brand.50", color: "brand.600" }}
             >
               {isMobileOpen ? <X size={26} /> : <MenuIcon size={26} />}
             </IconButton>
@@ -330,15 +442,15 @@ export function Navbar() {
               onClick={toggleMobile}
             />
             <MotionBox
-              initial={{ x: '100%' }}
+              initial={{ x: "100%" }}
               animate={{ x: 0 }}
-              exit={{ x: '100%' }}
-              transition={{ type: 'spring', damping: 25, stiffness: 200 }}
+              exit={{ x: "100%" }}
+              transition={{ type: "spring", damping: 25, stiffness: 200 }}
               position="fixed"
               top={0}
               right={0}
               bottom={0}
-              w={{ base: '100%', sm: '380px' }}
+              w={{ base: "100%", sm: "380px" }}
               bg="white"
               zIndex={1500}
               shadow="2xl"
@@ -347,22 +459,62 @@ export function Navbar() {
             >
               <VStack align="stretch" gap={8}>
                 <Flex justify="space-between" align="center">
-                  <Text fontSize="24px" fontWeight="900" color="gray.800">Menu</Text>
-                  <IconButton variant="ghost" onClick={toggleMobile} aria-label="Close menu" borderRadius="full">
+                  <Text fontSize="24px" fontWeight="900" color="gray.800">
+                    Menu
+                  </Text>
+                  <IconButton
+                    variant="ghost"
+                    onClick={toggleMobile}
+                    aria-label="Close menu"
+                    borderRadius="full"
+                  >
                     <X size={26} />
                   </IconButton>
                 </Flex>
 
                 <Box>
-                  <Text px={2} pb={4} fontWeight="800" color="gray.400" fontSize="xs" textTransform="uppercase" letterSpacing="1px">Main Tools</Text>
+                  <Text
+                    px={2}
+                    pb={4}
+                    fontWeight="800"
+                    color="gray.400"
+                    fontSize="xs"
+                    textTransform="uppercase"
+                    letterSpacing="1px"
+                  >
+                    Main Tools
+                  </Text>
                   <VStack align="stretch" gap={2}>
                     {[...mainTools, ...otherTools].map((tool) => (
-                      <Link key={tool.path} to={tool.path} onClick={toggleMobile} style={{ textDecoration: 'none' }}>
-                        <HStack p={4} borderRadius="20px" bg={isActive(tool.path) ? 'brand.50' : 'transparent'} _hover={{ bg: 'gray.50' }}>
-                          <Center w="44px" h="44px" bg={`${tool.color}10`} color={tool.color} borderRadius="14px">
+                      <Link
+                        key={tool.path}
+                        to={tool.path}
+                        onClick={toggleMobile}
+                        style={{ textDecoration: "none" }}
+                      >
+                        <HStack
+                          p={4}
+                          borderRadius="20px"
+                          bg={isActive(tool.path) ? "brand.50" : "transparent"}
+                          _hover={{ bg: "gray.50" }}
+                        >
+                          <Center
+                            w="44px"
+                            h="44px"
+                            bg={`${tool.color}10`}
+                            color={tool.color}
+                            borderRadius="14px"
+                          >
                             <tool.icon size={22} />
                           </Center>
-                          <Text fontWeight="800" color="gray.800" fontSize="16px" flex={1}>{tool.label}</Text>
+                          <Text
+                            fontWeight="800"
+                            color="gray.800"
+                            fontSize="16px"
+                            flex={1}
+                          >
+                            {tool.label}
+                          </Text>
                           <ChevronRight size={18} color="#CBD5E0" />
                         </HStack>
                       </Link>
@@ -371,25 +523,59 @@ export function Navbar() {
                 </Box>
 
                 <Box borderTop="1px solid" borderColor="gray.100" pt={6}>
-                  <Text px={2} pb={4} fontWeight="800" color="gray.400" fontSize="xs" textTransform="uppercase" letterSpacing="1px">Resources</Text>
+                  <Text
+                    px={2}
+                    pb={4}
+                    fontWeight="800"
+                    color="gray.400"
+                    fontSize="xs"
+                    textTransform="uppercase"
+                    letterSpacing="1px"
+                  >
+                    Resources
+                  </Text>
                   <VStack align="stretch" gap={2}>
                     {resourcesLinks.map((link) => (
-                      <Link key={link.path} to={link.path} onClick={toggleMobile} style={{ textDecoration: 'none' }}>
-                        <HStack p={4} borderRadius="20px" _hover={{ bg: 'gray.50' }}>
-                          <Center w="40px" h="40px" bg="gray.100" color="gray.600" borderRadius="12px">
+                      <Link
+                        key={link.path}
+                        to={link.path}
+                        onClick={toggleMobile}
+                        style={{ textDecoration: "none" }}
+                      >
+                        <HStack
+                          p={4}
+                          borderRadius="20px"
+                          _hover={{ bg: "gray.50" }}
+                        >
+                          <Center
+                            w="40px"
+                            h="40px"
+                            bg="gray.100"
+                            color="gray.600"
+                            borderRadius="12px"
+                          >
                             <link.icon size={20} />
                           </Center>
-                          <Text fontWeight="700" color="gray.700" fontSize="16px">{link.label}</Text>
+                          <Text
+                            fontWeight="700"
+                            color="gray.700"
+                            fontSize="16px"
+                          >
+                            {link.label}
+                          </Text>
                         </HStack>
                       </Link>
                     ))}
                   </VStack>
                 </Box>
-                
+
                 <Box
                   as="a"
-                  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                  {...({ href: "https://github.com/pratiksinghlad/pdf-online", target: "_blank", textDecoration: "none" } as any)}
+                  {...({
+                    href: "https://github.com/pratiksinghlad/pdf-online",
+                    target: "_blank",
+                    textDecoration: "none",
+                  } as any)} // eslint-disable-line @typescript-eslint/no-explicit-any
                   mt="auto"
                   display="flex"
                   alignItems="center"
@@ -401,9 +587,12 @@ export function Navbar() {
                   fontWeight="800"
                   fontSize="lg"
                   transition="all 0.2s"
-                  _hover={{ transform: 'translateY(-2px)', shadow: 'xl' }}
+                  _hover={{ transform: "translateY(-2px)", shadow: "xl" }}
                 >
-                    <HStack gap={2}><ExternalLink size={20} /><Text>Star on GitHub</Text></HStack>
+                  <HStack gap={2}>
+                    <ExternalLink size={20} />
+                    <Text>Star on GitHub</Text>
+                  </HStack>
                 </Box>
               </VStack>
             </MotionBox>

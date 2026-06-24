@@ -33,8 +33,7 @@ const tools = [
   },
   {
     title: "Protect PDF",
-    description:
-      "Add password protection to PDFs with client-side encryption.",
+    description: "Add password protection to PDFs with client-side encryption.",
   },
   {
     title: "Unlock PDF",
@@ -250,7 +249,7 @@ export function AboutPage() {
                 color="brand.500"
                 onClick={() =>
                   openExternalLink(
-                    `https://github.com/${GITHUB_PROFILE_ID}/pdf-online`
+                    `https://github.com/${GITHUB_PROFILE_ID}/pdf-online`,
                   )
                 }
                 cursor="pointer"
